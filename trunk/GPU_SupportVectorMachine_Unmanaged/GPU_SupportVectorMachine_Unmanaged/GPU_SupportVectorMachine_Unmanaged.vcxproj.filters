@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Precomp">
+      <UniqueIdentifier>{fc395052-2a01-4389-a113-4a7d0e1a8520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{1e226c92-491e-4923-8e8b-12f87e93ef20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsManager">
+      <UniqueIdentifier>{9786fe85-775d-475e-a42e-6205946fbc85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsManager\DX11">
+      <UniqueIdentifier>{c8b56113-8b5c-4770-bfc3-217c365dc583}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Init">
+      <UniqueIdentifier>{c18738c3-80b4-4f42-9ba1-9a482895cb6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Algorithms">
+      <UniqueIdentifier>{7092beac-a0d5-4dfc-86ab-38add5681a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ResourceManager">
+      <UniqueIdentifier>{3ee7363b-cde2-40a2-9222-50b58b1a79ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ResourceManager\Parsers">
+      <UniqueIdentifier>{56b488ed-2e47-4b3e-bfb0-1ecee5e6adf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\MessageManager">
+      <UniqueIdentifier>{3e79b39e-9ca5-48c7-9093-9fbd6842fc7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\MessageManager\Messages">
+      <UniqueIdentifier>{b7376613-6523-479d-8065-5f33e503cf05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\MessageManager\Handlers">
+      <UniqueIdentifier>{1c99941a-d02d-420f-8d3a-2ab8402edd17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\MessageManager\DataPacks">
+      <UniqueIdentifier>{fe07fd6f-2eb8-43a0-94c7-89b105c7096c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Algorithms\SVM">
+      <UniqueIdentifier>{c383a28d-2b91-48b2-8b8f-cee10b9cbe37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Algorithms\SVM\Kernels">
+      <UniqueIdentifier>{b23d3629-e7a3-427b-8eb7-107cd4569018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Application">
+      <UniqueIdentifier>{a2b6f2fc-0823-4d0d-96d0-71332f4cb507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{134cc6d5-d046-445d-adf2-321247543394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ResourceManager\Data">
+      <UniqueIdentifier>{eb1ddc44-4a2d-4ec1-8f7e-bc8074810005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ResourceManager\Parsers\Interface">
+      <UniqueIdentifier>{1d264242-f5e0-41e7-bdad-5b516d8d78b9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="small.ico">
+      <Filter>Resource Files\Application</Filter>
+    </None>
+    <None Include="GPU_SupportVectorMachine_Unmanaged.ico">
+      <Filter>Resource Files\Application</Filter>
+    </None>
+    <None Include="..\..\SourceResources\Shaders\Kernel.hlsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files\Precomp</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files\Precomp</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files\Precomp</Filter>
+    </ClInclude>
+    <ClInclude Include="GPU_SupportVectorMachine_Unmanaged.h">
+      <Filter>Source Files\Core\Init</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Source Files\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ParserARFF.h">
+      <Filter>Source Files\ResourceManager\Parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParserRaw.h">
+      <Filter>Source Files\ResourceManager\Parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="IParser.h">
+      <Filter>Source Files\ResourceManager\Parsers\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Value.h">
+      <Filter>Source Files\ResourceManager\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="DataDocument.h">
+      <Filter>Source Files\ResourceManager\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance.h">
+      <Filter>Source Files\ResourceManager\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsManager.h">
+      <Filter>Source Files\GraphicsManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXManager.h">
+      <Filter>Source Files\GraphicsManager\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFramework.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameworkMessage.h">
+      <Filter>Source Files\Core\MessageManager\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageHandler.h">
+      <Filter>Source Files\Core\MessageManager\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageHandlerDataPack.h">
+      <Filter>Source Files\Core\MessageManager\DataPacks</Filter>
+    </ClInclude>
+    <ClInclude Include="IKernel.h">
+      <Filter>Source Files\Algorithms\SVM\Kernels</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\Precomp</Filter>
+    </ClCompile>
+    <ClCompile Include="GPU_SupportVectorMachine_Unmanaged.cpp">
+      <Filter>Source Files\Core\Init</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ParserARFF.cpp">
+      <Filter>Source Files\ResourceManager\Parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="ParserRaw.cpp">
+      <Filter>Source Files\ResourceManager\Parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="IParser.cpp">
+      <Filter>Source Files\ResourceManager\Parsers\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="DataDocument.cpp">
+      <Filter>Source Files\ResourceManager\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXManager.cpp">
+      <Filter>Source Files\GraphicsManager\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFramework.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GPU_SupportVectorMachine_Unmanaged.rc">
+      <Filter>Resource Files\Application</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

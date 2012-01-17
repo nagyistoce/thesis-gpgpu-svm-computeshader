@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<InputDir>.\Shaders\</InputDir>
+		<OutputDir>..\Build_Output\Resources\Shaders\</OutputDir>
+		<OutputDir2>..\GPU_SupportVectorMachine_Unmanaged\Resources\Shaders\</OutputDir2>
+		<BuildType>Dev</BuildType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ShaderFiles Include="$(InputDir)\*.hlsl"/>
+	</ItemGroup>
+
+	<Target Name="Build">
+		<!-- Compile computeshaders -->
+		<MakeDir Directories="$(OutputDir)"/>
+		<MakeDir Directories="$(OutputDir2)"/>
+		<Exec Condition="%(ShaderFiles.Filename) != ''" Command="fxc.exe /T cs_5_0 /E cs_entry /Fo $(OutputDir)%(ShaderFiles.Filename).hlsl %(ShaderFiles.RelativeDir)%(ShaderFiles.Filename).hlsl"/>
+		<Exec Condition="%(ShaderFiles.Filename) != ''" Command="fxc.exe /T cs_5_0 /E cs_entry /Fo $(OutputDir2)%(ShaderFiles.Filename).hlsl %(ShaderFiles.RelativeDir)%(ShaderFiles.Filename).hlsl"/>
+	</Target>
+</Project>

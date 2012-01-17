@@ -1,0 +1,24 @@
+#pragma once
+#include "IParser.h"
+#include "DataDocument.h"
+
+namespace SVM_Framework{
+	class ResourceManager{
+	public:
+		ResourceManager();
+
+		void addParser(std::string name, IParserPtr parser);
+		DataDocumentPtr parseDocument(std::string filename);
+		
+		static boost::filesystem::path findFilePath(std::string filename, std::string dir = "");
+		static std::string getResourcePath() { return m_resourcePath; }
+		static std::vector<boost::filesystem::path> getFilesInFolder(std::string dir);
+	private:
+		std::map<std::string,IParserPtr> m_parsers;
+		std::map<std::string,DataDocumentPtr> m_loadedDocuments;
+
+		static std::string m_resourcePath;
+	};
+}
+
+typedef boost::shared_ptr<SVM_Framework::ResourceManager> ResourceManagerPtr;

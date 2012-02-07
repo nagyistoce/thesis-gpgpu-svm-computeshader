@@ -8,7 +8,9 @@ namespace SVM_Framework{
 		ResourceManager();
 
 		void addParser(std::string name, IParserPtr parser);
-		DataDocumentPtr parseDocument(std::string filename);
+		void unloadDocument(std::string doc);
+		DataDocumentPtr parseDocument(boost::filesystem::path path);
+		DataDocumentPtr getDocumentResource(boost::filesystem::path path);
 		
 		static boost::filesystem::path findFilePath(std::string filename, std::string dir = "");
 		static std::string getResourcePath() { return m_resourcePath; }

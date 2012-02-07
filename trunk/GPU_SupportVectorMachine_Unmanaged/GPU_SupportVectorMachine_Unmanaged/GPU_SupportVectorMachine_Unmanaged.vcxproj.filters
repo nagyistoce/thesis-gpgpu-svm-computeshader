@@ -63,6 +63,15 @@
     <Filter Include="Source Files\ResourceManager\Parsers\Interface">
       <UniqueIdentifier>{1d264242-f5e0-41e7-bdad-5b516d8d78b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Algorithms\Evaluation">
+      <UniqueIdentifier>{7250683c-bbb2-4bba-aad5-9391fda2cd3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Init\GUI">
+      <UniqueIdentifier>{a7f60280-a889-4cf8-8dfd-275ffa90461b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Init\GUI\Windows">
+      <UniqueIdentifier>{84175e3b-02a9-4ae4-bdbb-bb9a897a51df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="small.ico">
@@ -124,11 +133,62 @@
     <ClInclude Include="MessageHandler.h">
       <Filter>Source Files\Core\MessageManager\Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="MessageHandlerDataPack.h">
-      <Filter>Source Files\Core\MessageManager\DataPacks</Filter>
-    </ClInclude>
     <ClInclude Include="IKernel.h">
       <Filter>Source Files\Algorithms\SVM\Kernels</Filter>
+    </ClInclude>
+    <ClInclude Include="IAlgorithm.h">
+      <Filter>Source Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="ISVM.h">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11SVM.h">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClInclude>
+    <ClInclude Include="StartAlgorithmMessageHandler.h">
+      <Filter>Source Files\Core\MessageManager\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="IDataPack.h">
+      <Filter>Source Files\Core\MessageManager\DataPacks</Filter>
+    </ClInclude>
+    <ClInclude Include="AlgorithmDataPack.h">
+      <Filter>Source Files\Core\MessageManager\DataPacks</Filter>
+    </ClInclude>
+    <ClInclude Include="StartAlgorithmMessage.h">
+      <Filter>Source Files\Core\MessageManager\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="CUDASVM.h">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenCLSVM.h">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClInclude>
+    <ClInclude Include="CPUSVM.h">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClInclude>
+    <ClInclude Include="SMOSet.h">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBFKernel.h">
+      <Filter>Source Files\Algorithms\SVM\Kernels</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigManager.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="PuKKernel.h">
+      <Filter>Source Files\Algorithms\SVM\Kernels</Filter>
+    </ClInclude>
+    <ClInclude Include="CrossValidation.h">
+      <Filter>Source Files\Algorithms\Evaluation</Filter>
+    </ClInclude>
+    <ClInclude Include="IEvaluation.h">
+      <Filter>Source Files\Algorithms\Evaluation</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIManager.h">
+      <Filter>Source Files\Core\Init\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIWindow.h">
+      <Filter>Source Files\Core\Init\GUI\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +218,48 @@
     </ClCompile>
     <ClCompile Include="MainFramework.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11SVM.cpp">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClCompile>
+    <ClCompile Include="StartAlgorithmMessageHandler.cpp">
+      <Filter>Source Files\Core\MessageManager\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="CUDASVM.cpp">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenCLSVM.cpp">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClCompile>
+    <ClCompile Include="CPUSVM.cpp">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClCompile>
+    <ClCompile Include="ISVM.cpp">
+      <Filter>Source Files\Algorithms\SVM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBFKernel.cpp">
+      <Filter>Source Files\Algorithms\SVM\Kernels</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="PuKKernel.cpp">
+      <Filter>Source Files\Algorithms\SVM\Kernels</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>Source Files\ResourceManager\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="CrossValidation.cpp">
+      <Filter>Source Files\Algorithms\Evaluation</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>Source Files\Core\Init\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIWindow.cpp">
+      <Filter>Source Files\Core\Init\GUI\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="IKernel.cpp">
+      <Filter>Source Files\Algorithms\SVM\Kernels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -16,15 +16,36 @@ namespace SVM_Framework{
 		m_parsers[name] = parser;
 	}
 
-	DataDocumentPtr ResourceManager::parseDocument(std::string filename){
+	void ResourceManager::unloadDocument(std::string doc){
+		m_loadedDocuments.erase(doc);
+	}
+
+	DataDocumentPtr ResourceManager::parseDocument(boost::filesystem::path path){
+		if(!boost::filesystem::exists(path)){
+			boost::filesystem::path path = findFilePath(path.filename().generic_string());
+			if(!boost::filesystem::exists(path)){
+				return DataDocumentPtr();
+			}
+		}
+
+		std::string filename = path.filename().generic_string();
 		std::map<std::string,IParserPtr>::iterator parserItr;
 		if((parserItr = m_parsers.find(filename.substr(filename.find_last_of('.'),filename.size()))) == m_parsers.end()){
 			TRACE_DEBUG("No apropriate parser found for that fileformat.");
 			return DataDocumentPtr();
 		}
 
-		m_loadedDocuments[filename] = parserItr->second->parse(filename);
+		m_loadedDocuments[filename] = parserItr->second->parse(path);
 		return m_loadedDocuments[filename];
+	}
+
+	DataDocumentPtr ResourceManager::getDocumentResource(boost::filesystem::path path){
+		std::map<std::string,DataDocumentPtr>::iterator itr;
+		if((itr = m_loadedDocuments.find(path.filename().generic_string())) != m_loadedDocuments.end()){
+			return itr->second;
+		}
+		
+		return parseDocument(path);
 	}
 
 	boost::filesystem::path ResourceManager::findFilePath(std::string filename, std::string dir){

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MainFramework.h"
+#include "StartAlgorithmMessageHandler.h"
 
 namespace SVM_Framework{
 	MainFramework::MainFramework(GraphicsManagerPtr gmgr):m_endParsing(false){
@@ -7,11 +8,10 @@ namespace SVM_Framework{
 		m_gManager = gmgr;
 		m_messageStackMutex = MutexPtr(new boost::mutex);
 		m_parseCondition = ConditionPtr(new boost::condition_variable);
-
-		// Add message handlers
 	}
 
 	MainFramework::~MainFramework(){
+		m_messageHandlers.clear();
 		m_endParsing = true;
 		m_parseCondition->notify_all();
 		m_messageParser->join();
@@ -30,20 +30,27 @@ namespace SVM_Framework{
 		m_parseCondition->notify_one();
 	}
 
+	void MainFramework::initHandlers(){
+		// Add messageHandlers
+		m_messageHandlers["StartAlgorithm"] = MessageHandlerPtr(new StartAlgorithmMessageHandler(m_gManager));
+	}
+
 	void MainFramework::parseMessages(){
 		m_gManager->initialize();
+		initHandlers();
 		boost::mutex mut;
 		boost::unique_lock<boost::mutex> lock(mut);
 		while(!m_endParsing){
 			std::list<FrameworkMessagePtr> stack;
 			m_messageStackMutex->lock();
 			stack = m_messageStack;
+			m_messageStack.clear();
 			m_messageStackMutex->unlock();
 
 			std::map<std::string,MessageHandlerPtr>::iterator handlerItr;
 			while(!stack.empty()){
 				if((handlerItr = m_messageHandlers.find(stack.front()->getMessage())) != m_messageHandlers.end()){
-					MessageHandlerDataPackPtr dataPack = stack.front()->getDataPack();
+					IDataPackPtr dataPack = stack.front()->getDataPack();
 					dataPack->m_gfxMgr = m_gManager;
 					dataPack->m_recMgr = m_rManager;
 

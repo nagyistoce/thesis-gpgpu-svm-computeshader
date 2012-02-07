@@ -4,7 +4,7 @@
 namespace SVM_Framework{
 	class ParserRaw : public IParser{
 	public:
-		DataDocumentPtr parse(std::string filename);
+		DataDocumentPtr parse(boost::filesystem::path path);
 	private:
 	};
 }

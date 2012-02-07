@@ -1,16 +1,16 @@
 #pragma once
-#include "MessageHandlerDataPack.h"
+#include "IDataPack.h"
 
 namespace SVM_Framework{
 	class FrameworkMessage{
 	public:
-		FrameworkMessage(std::string message, MessageHandlerDataPackPtr dataPack):m_message(message),m_dataPack(dataPack){
+		FrameworkMessage(std::string message, IDataPackPtr dataPack):m_message(message),m_dataPack(dataPack){
 		}
 
 		std::string& getMessage() { return m_message; }
-		MessageHandlerDataPackPtr getDataPack() { return m_dataPack; }
+		IDataPackPtr getDataPack() { return m_dataPack; }
 	private:
-		MessageHandlerDataPackPtr m_dataPack;
+		IDataPackPtr m_dataPack;
 		std::string m_message;
 	};
 }

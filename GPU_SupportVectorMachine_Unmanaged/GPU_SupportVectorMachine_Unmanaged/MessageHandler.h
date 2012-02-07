@@ -1,10 +1,10 @@
 #pragma once
-#include "MessageHandlerDataPack.h"
+#include "IDataPack.h"
 
 namespace SVM_Framework{
 	class MessageHandler{
 	public:
-		virtual void handle(MessageHandlerDataPackPtr dataPack) = 0;
+		virtual void handle(IDataPackPtr dataPack) = 0;
 	private:
 	};
 }

@@ -2,9 +2,9 @@
 #include "ParserARFF.h"
 
 namespace SVM_Framework{
-	DataDocumentPtr ParserARFF::parse(std::string filename){
+	DataDocumentPtr ParserARFF::parse(boost::filesystem::path path){
 		DataDocumentPtr doc;
-		beginParsing(filename);
+		beginParsing(path);
 
 		endParsing();
 		return doc;

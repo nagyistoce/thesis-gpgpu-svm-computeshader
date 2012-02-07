@@ -3,11 +3,13 @@
 namespace SVM_Framework{
 	class Value : public boost::enable_shared_from_this<Value>{
 	public:
-		Value(float value){
+		Value(double value){
 			m_value = value;
 		}
+
+		double getValue() {return m_value;}
 	private:
-		float m_value;
+		double m_value;
 	};
 }
 

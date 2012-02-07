@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "FrameworkMessage.h"
 #include "MessageHandler.h"
+#include "IAlgorithm.h"
 
 namespace SVM_Framework{
 	class MainFramework{
@@ -13,6 +14,7 @@ namespace SVM_Framework{
 		void run();
 		void postMessage(FrameworkMessagePtr message);
 	private:
+		void initHandlers();
 		void parseMessages();
 		void addHandler(std::string messageId, MessageHandlerPtr handler);
 

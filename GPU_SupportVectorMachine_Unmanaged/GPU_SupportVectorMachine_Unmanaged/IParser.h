@@ -4,9 +4,9 @@
 namespace SVM_Framework{
 	class IParser{
 	public:
-		virtual DataDocumentPtr parse(std::string filename) = 0;
+		virtual DataDocumentPtr parse(boost::filesystem::path path) = 0;
 	protected:
-		void beginParsing(std::string filename);
+		void beginParsing(boost::filesystem::path path);
 		void endParsing();
 
 		unsigned int m_size;

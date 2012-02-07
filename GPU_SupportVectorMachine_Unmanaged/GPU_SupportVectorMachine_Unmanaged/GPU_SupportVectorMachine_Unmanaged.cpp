@@ -3,8 +3,7 @@
 
 #include "stdafx.h"
 #include "GPU_SupportVectorMachine_Unmanaged.h"
-#include "MainFramework.h"
-#include "DirectXManager.h"
+#include "GUIManager.h"
 
 #define MAX_LOADSTRING 100
 
@@ -12,6 +11,7 @@
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
+GUIManagerPtr guiManager;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -44,12 +44,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_GPU_SUPPORTVECTORMACHINE_UNMANAGED));
 
-	//HWND hwnd = FindWindow(szWindowClass,szTitle);
+	HWND hwnd = FindWindow(szWindowClass,szTitle);
 	// Create and initialize app framework
-	DirectXManagerPtr dxManager = DirectXManagerPtr(new SVM_Framework::DirectXManager());
-	MainFrameworkPtr application = MainFrameworkPtr(new SVM_Framework::MainFramework(dxManager));
-	application->run();
-
+	guiManager = GUIManagerPtr(new SVM_Framework::GUIManager(hwnd,hInstance));
+	
 	// Main message loop:
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
@@ -60,6 +58,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 	}
 
+	guiManager.reset();
 	return (int) msg.wParam;
 }
 
@@ -111,22 +110,20 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   HWND hWnd;
+	HWND hWnd;
+	hInst = hInstance; // Store instance handle in our global variable
 
-   hInst = hInstance; // Store instance handle in our global variable
-
-   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+	hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+	if (!hWnd){
+		return FALSE;
+	}
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
 
-   return TRUE;
+	return TRUE;
 }
 
 //
@@ -159,6 +156,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
 			break;
+		case BN_CLICKED:
+			guiManager->launchAlgo();
+			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
@@ -180,6 +180,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 // Message handler for about box.
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	int wmId, wmEvent;
+
 	UNREFERENCED_PARAMETER(lParam);
 	switch (message)
 	{
@@ -187,9 +189,12 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		return (INT_PTR)TRUE;
 
 	case WM_COMMAND:
+		wmId    = LOWORD(wParam);
+		wmEvent = HIWORD(wParam);
+
 		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 		{
-			EndDialog(hDlg, LOWORD(wParam));
+			guiManager->launchAlgo();
 			return (INT_PTR)TRUE;
 		}
 		break;

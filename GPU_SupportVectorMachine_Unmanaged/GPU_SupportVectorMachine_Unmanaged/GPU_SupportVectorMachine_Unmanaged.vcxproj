@@ -69,6 +69,10 @@
       <Command>
       </Command>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -92,6 +96,10 @@
     <PostBuildEvent>
       <Command>..\..\SourceResources\PrepareResources.bat</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\SourceResources\Shaders\Kernel.hlsl" />
@@ -99,34 +107,65 @@
     <None Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConfigManager.h" />
+    <ClInclude Include="CPUSVM.h" />
+    <ClInclude Include="CrossValidation.h" />
+    <ClInclude Include="CUDASVM.h" />
     <ClInclude Include="DataDocument.h" />
     <ClInclude Include="DirectXManager.h" />
+    <ClInclude Include="DX11SVM.h" />
     <ClInclude Include="FrameworkMessage.h" />
     <ClInclude Include="GPU_SupportVectorMachine_Unmanaged.h" />
     <ClInclude Include="GraphicsManager.h" />
+    <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="GUIWindow.h" />
+    <ClInclude Include="IAlgorithm.h" />
+    <ClInclude Include="IEvaluation.h" />
     <ClInclude Include="IKernel.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="IParser.h" />
     <ClInclude Include="MainFramework.h" />
     <ClInclude Include="MessageHandler.h" />
-    <ClInclude Include="MessageHandlerDataPack.h" />
+    <ClInclude Include="IDataPack.h" />
+    <ClInclude Include="OpenCLSVM.h" />
     <ClInclude Include="ParserARFF.h" />
     <ClInclude Include="ParserRaw.h" />
+    <ClInclude Include="PuKKernel.h" />
+    <ClInclude Include="RBFKernel.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="AlgorithmDataPack.h" />
+    <ClInclude Include="SMOSet.h" />
+    <ClInclude Include="StartAlgorithmMessage.h" />
+    <ClInclude Include="StartAlgorithmMessageHandler.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ISVM.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Value.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConfigManager.cpp" />
+    <ClCompile Include="CPUSVM.cpp" />
+    <ClCompile Include="CrossValidation.cpp" />
+    <ClCompile Include="CUDASVM.cpp" />
     <ClCompile Include="DataDocument.cpp" />
     <ClCompile Include="DirectXManager.cpp" />
+    <ClCompile Include="DX11SVM.cpp" />
     <ClCompile Include="GPU_SupportVectorMachine_Unmanaged.cpp" />
+    <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="GUIWindow.cpp" />
+    <ClCompile Include="IKernel.cpp" />
+    <ClCompile Include="Instance.cpp" />
     <ClCompile Include="IParser.cpp" />
+    <ClCompile Include="ISVM.cpp" />
     <ClCompile Include="MainFramework.cpp" />
+    <ClCompile Include="OpenCLSVM.cpp" />
     <ClCompile Include="ParserARFF.cpp" />
     <ClCompile Include="ParserRaw.cpp" />
+    <ClCompile Include="PuKKernel.cpp" />
+    <ClCompile Include="RBFKernel.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="StartAlgorithmMessageHandler.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

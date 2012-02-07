@@ -3,8 +3,7 @@
 #include "ResourceManager.h"
 
 namespace SVM_Framework{
-	void IParser::beginParsing(std::string filename){
-		boost::filesystem::path path = ResourceManager::findFilePath(filename);
+	void IParser::beginParsing(boost::filesystem::path path){
 		std::ifstream open(path.generic_string(),std::ios_base::binary);
 		m_size = boost::filesystem::file_size(path);
 		m_buffer = new char[m_size];

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CrossValidation.h"
+#include "GUIManager.h"
 
 namespace SVM_Framework{
 	CrossValidation::CrossValidation(unsigned int folds){
@@ -8,29 +9,19 @@ namespace SVM_Framework{
 	}
 
 	InstancePtr CrossValidation::getTrainingInstance(unsigned int index){
-		unsigned int ind = index;
-
-		if((index < m_foldEnd) && (index >= m_foldStart)){
-			ind += m_numTestingIns;
-		}
-
-		return m_data->getInstance(ind);
+		return m_trainingInstances[index];
 	}
 	
 	InstancePtr CrossValidation::getTestingInstance(unsigned int index){
-		if(((index+m_foldStart) > m_foldEnd)){
-			return InstancePtr();
-		}
-
-		return m_data->getInstance(index+m_foldStart);
+		return m_testingInstances[index];
 	}
 
 	unsigned int CrossValidation::getNumTrainingInstances(){
-		return m_numTrainingIns;
+		return m_trainingInstances.size();
 	}
 
 	unsigned int CrossValidation::getNumTestingInstances(){
-		return m_numTestingIns;
+		return m_testingInstances.size();
 	}
 
 	bool CrossValidation::advance(){
@@ -38,30 +29,57 @@ namespace SVM_Framework{
 			return false;
 		m_currentFold++;
 
-		if(m_folds == m_currentFold){
-			int add = ((m_numTestingIns+m_numTrainingIns)-(m_numTestingIns*m_folds));
-			m_foldStart = m_numTestingIns*(m_currentFold-1);
-			m_foldEnd = m_numTestingIns+m_numTrainingIns-1;
+		m_testingInstances.clear();
+		m_trainingInstances.clear();
 
-			m_numTestingIns += add;
-			m_numTrainingIns -= add;
+		if(m_folds == m_currentFold){
+			int foldStart = (m_cl1Instances.size()/m_folds)*(m_currentFold-1);
+			for(unsigned int i=0; i<m_cl1Instances.size(); i++){
+				if(i >= foldStart)
+					m_testingInstances.push_back(m_cl1Instances[i]);
+				else
+					m_trainingInstances.push_back(m_cl1Instances[i]);
+			}
+			foldStart = (m_cl2Instances.size()/m_folds)*(m_currentFold-1);
+			for(unsigned int i=0; i<m_cl2Instances.size(); i++){
+				if(i >= foldStart)
+					m_testingInstances.push_back(m_cl2Instances[i]);
+				else
+					m_trainingInstances.push_back(m_cl2Instances[i]);
+			}
 		}
 		else{
-			m_foldStart = m_numTestingIns*(m_currentFold-1);
-			m_foldEnd = m_foldStart + m_numTestingIns;
+			int foldStart = (m_cl1Instances.size()/m_folds)*(m_currentFold-1);
+			int foldEnd = (m_cl1Instances.size()/m_folds)+foldStart;
+			for(unsigned int i=0; i<m_cl1Instances.size(); i++){
+				if(i >= foldStart && i < foldEnd)
+					m_testingInstances.push_back(m_cl1Instances[i]);
+				else
+					m_trainingInstances.push_back(m_cl1Instances[i]);
+			}
+			foldStart = (m_cl2Instances.size()/m_folds)*(m_currentFold-1);
+			foldEnd = (m_cl2Instances.size()/m_folds)+foldStart;
+			for(unsigned int i=0; i<m_cl2Instances.size(); i++){
+				if(i >= foldStart && i < foldEnd)
+					m_testingInstances.push_back(m_cl2Instances[i]);
+				else
+					m_trainingInstances.push_back(m_cl2Instances[i]);
+			}
 		}
+
+		std::wstringstream stream;
+		stream << "Training instance: " << m_trainingInstances.size() << " Testing instances: " << m_testingInstances.size() << " for fold " << m_currentFold << "\r\n";
+		m_dataPack->m_gui->postDebugMessage(stream.str());
+
 		return true;
 	}
 
 	void CrossValidation::init(){
-		if(m_folds < 2){
-			m_numTrainingIns = m_data->getNumInstances();
-			m_numTestingIns = 0;
-		}
-		else{
-			m_numTestingIns = floor(double(m_data->getNumInstances())/double(m_folds));
-			m_numTrainingIns = ceil((double(m_data->getNumInstances())/double(m_folds))*double(m_folds-1));
-			assert((m_numTrainingIns+m_numTestingIns) == m_data->getNumInstances());
+		for(unsigned int i=0; i<m_data->getNumInstances(); i++){
+			if(m_data->getInstance(i)->classValue() == m_data->m_cl1Value)
+				m_cl1Instances.push_back(m_data->getInstance(i));
+			else
+				m_cl2Instances.push_back(m_data->getInstance(i));
 		}
 	}
 

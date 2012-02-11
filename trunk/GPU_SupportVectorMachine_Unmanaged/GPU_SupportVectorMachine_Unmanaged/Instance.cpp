@@ -22,7 +22,7 @@ namespace SVM_Framework{
 	}
 		
 	unsigned int Instance::numValues(){
-		return m_valueVector.size(); 
+		return m_valueVector.size();
 	}
 		
 	double Instance::getValue(unsigned int ind){

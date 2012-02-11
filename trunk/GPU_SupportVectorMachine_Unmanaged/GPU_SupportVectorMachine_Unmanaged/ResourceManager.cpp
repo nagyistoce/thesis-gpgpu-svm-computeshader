@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "ParserRaw.h"
 #include "ParserARFF.h"
+#include "ParserRDS.h"
 
 namespace SVM_Framework{
 	std::string ResourceManager::m_resourcePath = "..\\Resources\\";
@@ -10,6 +11,7 @@ namespace SVM_Framework{
 		// Add parsers
 		addParser(".txt",IParserPtr(new ParserRaw));
 		addParser(".arff",IParserPtr(new ParserARFF));
+		addParser(".rds_txt",IParserPtr(new ParserRDS));
 	}
 
 	void ResourceManager::addParser(std::string name, IParserPtr parser){

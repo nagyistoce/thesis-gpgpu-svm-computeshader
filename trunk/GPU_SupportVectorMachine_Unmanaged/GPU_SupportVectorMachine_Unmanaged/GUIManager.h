@@ -2,16 +2,26 @@
 #include "MainFramework.h"
 #include "GUIWindow.h"
 
+#define IDC_BUTTON_RUN 9823
+#define IDC_STATIC_INFOTEXT 7398
+#define IDC_STATIC_DEBUG 2892
+#define IDC_EDIT_PARAM1 9275
+#define IDC_EDIT_PARAM2 9375
+#define IDC_EDIT_PARAM3 9475
+#define IDC_EDIT_FILEPATH 9234
+
 namespace SVM_Framework{
 	class GUIManager{
 	public:
 		GUIManager(HWND hwnd, HINSTANCE hInst);
 
 		void launchAlgo();
-		unsigned int getEditWindowId() { return m_editWindow; }
 		void setText(int id, std::wstring message);
+		std::string getEditText(int id);
 
-		unsigned int addWindow(std::wstring type, int x, int y, int width, int height, std::wstring text);
+		void postDebugMessage(std::wstring message);
+
+		unsigned int addWindow(int id, std::wstring type, DWORD style1, DWORD style2, int x, int y, int width, int height, std::wstring text);
 		void removeWindow(unsigned int id);
 	private:
 		MainFrameworkPtr m_framework;
@@ -19,9 +29,8 @@ namespace SVM_Framework{
 
 		HWND m_hwnd;
 		HINSTANCE m_hinstance;
-		unsigned int m_windowId;
 
-		unsigned int m_editWindow;
+		std::wstring m_debugString;
 	};
 }
 

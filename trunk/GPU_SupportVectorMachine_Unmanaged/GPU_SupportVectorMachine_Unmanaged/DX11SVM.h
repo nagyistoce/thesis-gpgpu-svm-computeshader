@@ -14,7 +14,8 @@ namespace SVM_Framework{
 		int takeStep(int i1, int i2, double F2);
 		double SVMOutput(int index, InstancePtr inst);
 	private:
-		ID3D11ComputeShader* m_shader;
+		ID3D11ComputeShader	*m_shaderTraining,
+							*m_shaderTesting;
 		std::vector<ID3D11UnorderedAccessView*> m_accessViews;
 		std::vector<ID3D11Buffer*> m_uavBuffers;
 		std::vector<ID3D11Buffer*> m_constantBuffers;

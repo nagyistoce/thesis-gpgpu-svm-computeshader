@@ -1,5 +1,6 @@
 #pragma once
 #include "DataDocument.h"
+#include "IDataPack.h"
 
 namespace SVM_Framework{
 	class IEvaluation{
@@ -13,11 +14,10 @@ namespace SVM_Framework{
 		virtual bool advance() = 0;
 		virtual void init() = 0;
 
-		void setData(DataDocumentPtr data){ m_data = data; init(); }
+		void setData(DataDocumentPtr data, IDataPackPtr dataPack){	m_dataPack = dataPack; m_data = data; init(); }
 	protected:
+		IDataPackPtr m_dataPack;
 		DataDocumentPtr m_data;
-		unsigned int	m_numTrainingIns,
-						m_numTestingIns;
 	};
 }
 

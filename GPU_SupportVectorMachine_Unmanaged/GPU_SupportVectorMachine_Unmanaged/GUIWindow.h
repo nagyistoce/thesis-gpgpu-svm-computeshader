@@ -3,7 +3,7 @@
 namespace SVM_Framework{
 	class GUIWindow{
 	public:
-		GUIWindow(std::wstring type, HWND hwnd, int x, int y, int width, int height, HINSTANCE instance, std::wstring text);
+		GUIWindow(int id, std::wstring type, HWND hwnd, DWORD style1, DWORD style2, int x, int y, int width, int height, HINSTANCE instance, std::wstring text);
 		~GUIWindow();
 
 		HWND getHWND() {return m_hwnd;}

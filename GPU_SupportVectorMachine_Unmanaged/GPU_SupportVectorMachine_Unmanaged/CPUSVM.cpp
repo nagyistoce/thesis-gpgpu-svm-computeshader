@@ -12,63 +12,125 @@ namespace SVM_Framework{
 	}
 	
 	CPUSVM::~CPUSVM(){
-		
+		for(unsigned int i=0; i<m_threads.size(); i++){
+			m_threads[i]->interrupt();
+		}
+		for(unsigned int i=0; i<m_threads.size(); i++){
+			m_threads[i]->join();
+		}
 	}
 
 	void CPUSVM::execute(){
 		std::wstringstream outputStream;;
 		unsigned int timerId = ConfigManager::startTimer();
-		m_data->m_gui->setText(m_data->m_gui->getEditWindowId(),L"Working...");
 
 		unsigned int	cl1Correct = 0,
 						cl1Wrong = 0,
 						cl2Correct = 0,
 						cl2Wrong = 0;
+		long			cacheHits = 0,
+						kernelEvals = 0;
 
-		m_params.assign(5,AlgoParams());
-		for(unsigned int i=0; i<5; i++){
-			m_params[i].m_evaluation = IEvaluationPtr(new CrossValidation(10));
-			m_params[i].m_evaluation->setData(m_document);
-			boost::static_pointer_cast<CrossValidation>(m_params[i].m_evaluation)->setFold(i);
+		bool multithread = true;
 
-			m_threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(
-				boost::bind(&CPUSVM::executeFold,this,i)
-			)));
+		if(multithread){
+			outputStream << L"Working on batch 1...\r\n";
+			m_data->m_gui->setText(IDC_STATIC_INFOTEXT,outputStream.str());
+			m_params.assign(5,AlgoParams());
+			for(unsigned int i=0; i<5; i++){
+				m_params[i].m_evaluation = IEvaluationPtr(new CrossValidation(10));
+				m_params[i].m_evaluation->setData(m_document,m_data);
+				boost::static_pointer_cast<CrossValidation>(m_params[i].m_evaluation)->setFold(i);
+
+				m_threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(
+					boost::bind(&CPUSVM::executeFold,this,i)
+				)));
+				if(SetThreadPriority(m_threads.back()->native_handle(),THREAD_PRIORITY_BELOW_NORMAL)){
+					assert(0);
+				}
+			}
+
+			for(unsigned int i=0; i<5; i++){
+				m_threads[i]->join();
+				cl1Correct += m_params[i].cl1Correct;
+				cl2Correct += m_params[i].cl2Correct;
+				cl1Wrong += m_params[i].cl1Wrong;
+				cl2Wrong += m_params[i].cl2Wrong;
+
+				cacheHits += m_params[i].m_kernel->getCacheHits();
+				kernelEvals += m_params[i].m_kernel->getKernelEvals();
+			}
+			m_threads.clear();
+
+			outputStream << "Intermediate time: " << ConfigManager::getTime(timerId);
+
+			outputStream	<< "\r\n\r\n" << m_document->m_cl1Value << "	" << m_document->m_cl2Value 
+							<< "\r\n" << cl1Correct << "	" << cl1Wrong << "	" << m_document->m_cl1Value 
+							<< "\r\n" << cl2Wrong << "	" << cl2Correct << "	" << m_document->m_cl2Value << "\r\n";
+			outputStream << "Accuracy: " << (float(cl1Correct+cl2Correct)/float(cl1Correct+cl2Correct+cl1Wrong+cl2Wrong))*100 << "%\r\n\r\n";
+			outputStream << "Total number tested: " << cl1Correct+cl2Correct+cl1Wrong+cl2Wrong << "\r\n";
+			outputStream << "Cachehits: " << cacheHits << " (" << (double(cacheHits)/double(cacheHits+kernelEvals))*100 << "%)\r\n";
+			outputStream <<	"Kernel evals: " << kernelEvals << "\r\n\r\n";
+			outputStream << "Working on batch 2...\r\n";
+
+			m_data->m_gui->setText(IDC_STATIC_INFOTEXT,outputStream.str());
+
+			for(unsigned int i=0; i<5; i++){
+				m_params[i].m_evaluation = IEvaluationPtr(new CrossValidation(10));
+				m_params[i].m_evaluation->setData(m_document,m_data);
+				boost::static_pointer_cast<CrossValidation>(m_params[i].m_evaluation)->setFold(i+5);
+
+				m_threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(
+					boost::bind(&CPUSVM::executeFold,this,i)
+				)));
+				if(SetThreadPriority(m_threads.back()->native_handle(),THREAD_PRIORITY_BELOW_NORMAL)){
+					assert(0);
+				}
+			}
+
+			for(unsigned int i=0; i<5; i++){
+				m_threads[i]->join();
+				cl1Correct += m_params[i].cl1Correct;
+				cl2Correct += m_params[i].cl2Correct;
+				cl1Wrong += m_params[i].cl1Wrong;
+				cl2Wrong += m_params[i].cl2Wrong;
+
+				cacheHits += m_params[i].m_kernel->getCacheHits();
+				kernelEvals += m_params[i].m_kernel->getKernelEvals();
+			}
+			m_threads.clear();
 		}
+		else{
+			m_params.assign(1,AlgoParams());
+			m_params[0].m_evaluation = IEvaluationPtr(new CrossValidation(10));
+			m_params[0].m_evaluation->setData(m_document,m_data);
+			std::wstringstream stream;
+			for(unsigned int i=0; i<10; i++){
+				stream << "Working on fold " << i+1 << "...";
+				m_data->m_gui->setText(IDC_STATIC_INFOTEXT,stream.str());
+				boost::static_pointer_cast<CrossValidation>(m_params[0].m_evaluation)->setFold(i);
+				executeFold(0);
+				cl1Correct += m_params[0].cl1Correct;
+				cl2Correct += m_params[0].cl2Correct;
+				cl1Wrong += m_params[0].cl1Wrong;
+				cl2Wrong += m_params[0].cl2Wrong;
 
-		for(unsigned int i=0; i<5; i++){
-			m_threads[i]->join();
-			cl1Correct += m_params[i].cl1Correct;
-			cl2Correct += m_params[i].cl2Correct;
-			cl1Wrong += m_params[i].cl1Wrong;
-			cl2Wrong += m_params[i].cl2Wrong;
-		}
-		m_threads.clear();
-
-		for(unsigned int i=0; i<5; i++){
-			m_params[i].m_evaluation = IEvaluationPtr(new CrossValidation(10));
-			m_params[i].m_evaluation->setData(m_document);
-			boost::static_pointer_cast<CrossValidation>(m_params[i].m_evaluation)->setFold(i+5);
-
-			m_threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(
-				boost::bind(&CPUSVM::executeFold,this,i)
-			)));
-		}
-
-		for(unsigned int i=0; i<5; i++){
-			m_threads[i]->join();
-			cl1Correct += m_params[i].cl1Correct;
-			cl2Correct += m_params[i].cl2Correct;
-			cl1Wrong += m_params[i].cl1Wrong;
-			cl2Wrong += m_params[i].cl2Wrong;
+				cacheHits += m_params[0].m_kernel->getCacheHits();
+				kernelEvals += m_params[0].m_kernel->getKernelEvals();
+			}
 		}
 		
 		outputStream << "Total time: " << ConfigManager::getTime(timerId);
 
-		outputStream << "\n\na	b\n" << cl1Correct << "	" << cl1Wrong << "\n" << cl2Wrong << "	" << cl2Correct << "\n";
-		outputStream << "Accuracy: " << (float(cl1Correct+cl2Correct)/float(cl1Correct+cl2Correct+cl1Wrong+cl2Wrong))*100 << "%\n\n";
+		outputStream	<< "\r\n\r\n" << m_document->m_cl1Value << "	" << m_document->m_cl2Value 
+						<< "\r\n" << cl1Correct << "	" << cl1Wrong << "	" << m_document->m_cl1Value 
+						<< "\r\n" << cl2Wrong << "	" << cl2Correct << "	" << m_document->m_cl2Value << "\r\n";
+		outputStream << "Accuracy: " << (float(cl1Correct+cl2Correct)/float(cl1Correct+cl2Correct+cl1Wrong+cl2Wrong))*100 << "%\r\n\r\n";
+		outputStream << "Total number tested: " << cl1Correct+cl2Correct+cl1Wrong+cl2Wrong << "\r\n";
+		outputStream << "Cachehits: " << cacheHits << " (" << (double(cacheHits)/double(cacheHits+kernelEvals))*100 << "%)\r\n";
+		outputStream <<	"Kernel evals: " << kernelEvals;
 
-		m_data->m_gui->setText(m_data->m_gui->getEditWindowId(),outputStream.str());
+		m_data->m_gui->setText(IDC_STATIC_INFOTEXT,outputStream.str());
 		ConfigManager::removeTimer(timerId);
 
 		m_threads.clear();
@@ -96,13 +158,12 @@ namespace SVM_Framework{
 		m_params[id].m_alpha.assign(numInstances,0);
 
 		// Set class values
-		int cl1 = 1, cl2 = 0;
 		m_params[id].m_iUp = -1; m_params[id].m_iLow = -1;
 		for (unsigned int i = 0; i < m_params[id].m_class.size(); i++) {
-			if(m_params[id].m_evaluation->getTrainingInstance(i)->classValue() == cl1) {
+			if(m_params[id].m_evaluation->getTrainingInstance(i)->classValue() == m_document->m_cl1Value) {
 				m_params[id].m_class[i] = -1; m_params[id].m_iLow = i;
 			} 
-			else if (m_params[id].m_evaluation->getTrainingInstance(i)->classValue() == cl2) {
+			else if (m_params[id].m_evaluation->getTrainingInstance(i)->classValue() == m_document->m_cl2Value) {
 				m_params[id].m_class[i] = 1; m_params[id].m_iUp = i;
 			} 
 			else{
@@ -122,25 +183,28 @@ namespace SVM_Framework{
 		}
 
 		ConfigManager::initialize();
-		std::string kernelName = ConfigManager::getSetting("kernel");
+		std::string kernelName = m_data->m_gui->getEditText(IDC_EDIT_PARAM1);
 		if(kernelName.compare("puk") == 0)
 			m_params[id].m_kernel = IKernelPtr(new PuKKernel);
 		else if(kernelName.compare("rbf") == 0)
 			m_params[id].m_kernel = IKernelPtr(new RBFKernel);
+		else
+			m_params[id].m_kernel = IKernelPtr(new PuKKernel);
 		m_params[id].m_kernel->initKernel(m_params[id].m_evaluation);
 		
 		std::stringstream ss;
-		double p1,p2,p3;
-		ss << ConfigManager::getSetting("kernelParam1");
+		double p1,p2;
+		ss << m_data->m_gui->getEditText(IDC_EDIT_PARAM2);
 		ss >> p1;
+		if(ss.fail())
+			p1 = 1.0;
 		ss = std::stringstream();
-		ss << ConfigManager::getSetting("kernelParam2");
+		ss << m_data->m_gui->getEditText(IDC_EDIT_PARAM3);
 		ss >> p2;
-		ss = std::stringstream();
-		ss << ConfigManager::getSetting("kernelParam3");
-		ss >> p3;
+		if(ss.fail())
+			p2 = 1.0;
 
-		m_params[id].m_kernel->setParameters(p1,p2,p3);
+		m_params[id].m_kernel->setParameters(p1,p2);
 	}
 	
 	int CPUSVM::examineExample(int i2, unsigned int id){
@@ -559,13 +623,13 @@ namespace SVM_Framework{
 			double output = SVMOutput(-1,testInst,id);
 			classValue = testInst->classValue();
 			if(output < 0){
-				if(testInst->classValue() == 1)
+				if(testInst->classValue() == m_document->m_cl1Value)
 					m_params[id].cl1Correct++;
 				else
 					m_params[id].cl1Wrong++;
 			}
 			else{
-				if(testInst->classValue() == 0)
+				if(testInst->classValue() == m_document->m_cl2Value)
 					m_params[id].cl2Correct++;
 				else
 					m_params[id].cl2Wrong++;

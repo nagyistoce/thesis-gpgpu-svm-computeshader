@@ -3,7 +3,9 @@
 
 namespace SVM_Framework{
 	DataDocument::DataDocument():m_classAttributeId(0){
-		
+		m_cl1Value = 0;
+		m_cl2Value = 1;
+		m_normalize = true;
 	}
 
 	InstancePtr DataDocument::getInstance(unsigned int index){
@@ -98,11 +100,21 @@ namespace SVM_Framework{
 
 		// Normalize
 		double scale=2,translate=-1,value;
+		std::set<int> classValues;
 		for(unsigned int i=0; i<m_instances.size(); i++){
-			for(unsigned int j=0; j<getNumAttributes(); j++){
-				value = m_instances[i]->m_valueVector[j]->getValue();
-				*m_instances[i]->m_valueVector[j] = Value(((value - min[j]) / (max[j] - min[j]) * scale + translate));
+			classValues.insert(m_instances[i]->classValue());
+			if(m_normalize){
+				for(unsigned int j=0; j<getNumAttributes(); j++){
+					value = m_instances[i]->m_valueVector[j]->getValue();
+					if((max[j] - min[j]) != 0)
+						*m_instances[i]->m_valueVector[j] = Value((((value - min[j]) / (max[j] - min[j])) * scale + translate));
+				}
 			}
 		}
+
+		std::set<int>::iterator clItr = classValues.begin();
+		m_cl1Value = *clItr;
+		clItr++;
+		m_cl2Value = *clItr;
 	}
 }

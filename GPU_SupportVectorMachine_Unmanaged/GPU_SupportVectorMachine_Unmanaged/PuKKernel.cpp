@@ -31,10 +31,11 @@ namespace SVM_Framework{
 	void PuKKernel::setParameters(double p1, double p2, double p3){
 		m_omega = p1;
 		m_sigma = p2;
+		computeFactor();
 	}
 
 	void PuKKernel::computeFactor(){
 		double root = sqrt(pow(2.0, 1.0 / m_omega) - 1);
-		m_factor = 2.0 * root / m_sigma;
+		m_factor = (2.0 * root) / m_sigma;
 	}
 }

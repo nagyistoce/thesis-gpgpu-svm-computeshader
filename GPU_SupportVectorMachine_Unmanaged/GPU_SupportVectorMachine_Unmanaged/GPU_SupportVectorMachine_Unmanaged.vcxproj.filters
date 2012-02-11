@@ -72,6 +72,9 @@
     <Filter Include="Source Files\Core\Init\GUI\Windows">
       <UniqueIdentifier>{84175e3b-02a9-4ae4-bdbb-bb9a897a51df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\Includes">
+      <UniqueIdentifier>{fa10054b-6321-4dab-a352-f57527ceea8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="small.ico">
@@ -80,8 +83,17 @@
     <None Include="GPU_SupportVectorMachine_Unmanaged.ico">
       <Filter>Resource Files\Application</Filter>
     </None>
-    <None Include="..\..\SourceResources\Shaders\Kernel.hlsl">
+    <None Include="..\..\SourceResources\Shaders\SMO_Test.hlsl">
       <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\SourceResources\Shaders\SMO_Train.hlsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\SourceResources\Includes\Kernel.hlsl">
+      <Filter>Resource Files\Shaders\Includes</Filter>
+    </None>
+    <None Include="..\..\SourceResources\Includes\SMO_Buffers.hlsl">
+      <Filter>Resource Files\Shaders\Includes</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +202,9 @@
     <ClInclude Include="GUIWindow.h">
       <Filter>Source Files\Core\Init\GUI\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="ParserRDS.h">
+      <Filter>Source Files\ResourceManager\Parsers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -260,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="IKernel.cpp">
       <Filter>Source Files\Algorithms\SVM\Kernels</Filter>
+    </ClCompile>
+    <ClCompile Include="ParserRDS.cpp">
+      <Filter>Source Files\ResourceManager\Parsers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

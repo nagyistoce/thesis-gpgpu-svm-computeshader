@@ -21,8 +21,10 @@ namespace SVM_Framework{
 		unsigned int	m_folds;
 		unsigned int	m_currentFold;
 
-		unsigned int	m_foldStart,
-						m_foldEnd;
+		std::vector<InstancePtr>	m_cl1Instances,
+									m_cl2Instances,
+									m_trainingInstances,
+									m_testingInstances;
 	};
 }
 

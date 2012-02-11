@@ -5,6 +5,10 @@
 
 #pragma once
 
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 #include "targetver.h"
 #include "resource.h"
 
@@ -35,6 +39,7 @@
 #include <boost/timer.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <d3d11.h>
 #include <d3dx11.h>

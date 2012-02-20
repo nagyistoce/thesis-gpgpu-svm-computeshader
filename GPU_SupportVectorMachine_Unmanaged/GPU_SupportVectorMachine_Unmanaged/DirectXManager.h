@@ -19,11 +19,45 @@ namespace SVM_Framework{
 		void launchComputation(int x, int y, int z);
 		void setComputeShader(ID3D11ComputeShader* shader);
 		void setComputeShaderConstantBuffers(std::vector<ID3D11Buffer*> &buffers);
+		void setComputeShaderResourceViews(std::vector<ID3D11ShaderResourceView*> &views);
 		void setComputeShaderUnorderedAccessViews(std::vector<ID3D11UnorderedAccessView*> &views);
 
 		// Helpers
 		template <class T>
-		HRESULT createStructuredBuffer(UINT iNumElements, ID3D11Buffer** ppBuffer, ID3D11UnorderedAccessView** ppUAV, const T* pInitialData){
+		void copyFromGraphicsCard(ID3D11Buffer* buffer, std::vector<T> &copy){
+			D3D11_BUFFER_DESC desc;
+			buffer->GetDesc(&desc);
+
+			desc.Usage = D3D11_USAGE_STAGING;
+			desc.BindFlags = 0;
+			desc.MiscFlags = 0;
+			desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+
+			ID3D11Buffer *cpuBuffer;
+			m_adapters.back().m_deviceHandle->CreateBuffer(&desc,0,&cpuBuffer);
+			m_adapters.back().m_context->CopyResource(cpuBuffer,buffer);
+
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			m_adapters.back().m_context->Map(cpuBuffer,0,D3D11_MAP_READ,0,&mappedResource);
+			
+			std::copy((T*)mappedResource.pData,(T*)mappedResource.pData+copy.size(),copy.begin());
+			
+			m_adapters.back().m_context->Unmap(cpuBuffer,0);
+			cpuBuffer->Release();
+		}
+
+		template <class T>
+		void copyToGraphicsCard(ID3D11Buffer* pBuffer, std::vector<T> &data){
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			m_adapters.back().m_context->Map(pBuffer,0,D3D11_MAP_WRITE_DISCARD,0,&mappedResource);
+
+			std::copy(data.begin(),data.end(),(T*)mappedResource.pData);
+			
+			m_adapters.back().m_context->Unmap(pBuffer,0);
+		}
+
+		template <class T>
+		HRESULT createStructuredBufferUAV(DWORD access, UINT iNumElements, ID3D11Buffer** ppBuffer, ID3D11UnorderedAccessView** ppUAV, const T* pInitialData){
 			HRESULT hr = S_OK;
 
 			// Create SB
@@ -34,6 +68,7 @@ namespace SVM_Framework{
 			bufferDesc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
 			bufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 			bufferDesc.StructureByteStride = sizeof(T);
+			bufferDesc.CPUAccessFlags = access;
 
 			D3D11_SUBRESOURCE_DATA bufferInitData;
 			ZeroMemory( &bufferInitData, sizeof(bufferInitData) );
@@ -56,10 +91,46 @@ namespace SVM_Framework{
 		}
 
 		template <class T>
+		HRESULT createStructuredBufferSRV(DWORD access, UINT iNumElements, ID3D11Buffer** ppBuffer, ID3D11ShaderResourceView** ppUAV, const T* pInitialData){
+			HRESULT hr = S_OK;
+
+			// Create SB
+			D3D11_BUFFER_DESC bufferDesc;
+			ZeroMemory( &bufferDesc, sizeof(bufferDesc) );
+			bufferDesc.ByteWidth = iNumElements * sizeof(T);
+			bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+			bufferDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+			bufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+			bufferDesc.StructureByteStride = sizeof(T);
+			bufferDesc.CPUAccessFlags = access;
+
+			D3D11_SUBRESOURCE_DATA bufferInitData;
+			ZeroMemory( &bufferInitData, sizeof(bufferInitData) );
+			bufferInitData.pSysMem = pInitialData;
+			hr = m_adapters.back().m_deviceHandle->CreateBuffer( &bufferDesc, (pInitialData)? &bufferInitData : NULL, ppBuffer);
+			if(FAILED(hr))
+				return hr;
+
+			// Create UAV
+			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+			ZeroMemory( &srvDesc, sizeof(srvDesc) );
+			srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+			srvDesc.Buffer.NumElements = iNumElements;
+			hr = m_adapters.back().m_deviceHandle->CreateShaderResourceView( *ppBuffer, &srvDesc, ppUAV );
+			if(FAILED(hr))
+				return hr;
+
+			return hr;
+		}
+
+		template <class T>
 		HRESULT createConstantBuffer(ID3D11Buffer** ppBuffer, const T* pInitialData){
+			HRESULT hr = S_OK;
+
 			// Fill in a buffer description.
 			D3D11_BUFFER_DESC cbDesc;
-			cbDesc.ByteWidth = sizeof( T );
+			cbDesc.ByteWidth = 16*((sizeof(T)+15)/16);
 			cbDesc.Usage = D3D11_USAGE_DYNAMIC;
 			cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 			cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -72,7 +143,12 @@ namespace SVM_Framework{
 
 			// Create the buffer.
 			m_adapters.back().m_deviceHandle->CreateBuffer( &cbDesc, (pInitialData)? &bufferInitData : NULL, ppBuffer );
+			if(FAILED(hr))
+				return hr;
+
+			return hr;
 		}
+
 		HRESULT createComputeShader(std::string filename, ID3D11ComputeShader** ppShader);	
 	private:
 		void createShaders();

@@ -9,19 +9,19 @@ namespace SVM_Framework{
 	}
 
 	InstancePtr CrossValidation::getTrainingInstance(unsigned int index){
-		return m_trainingInstances[index];
+		return m_data->getInstance(m_trainingInds[index]);
 	}
 	
 	InstancePtr CrossValidation::getTestingInstance(unsigned int index){
-		return m_testingInstances[index];
+		return m_data->getInstance(m_testingInds[index]);
 	}
 
 	unsigned int CrossValidation::getNumTrainingInstances(){
-		return m_trainingInstances.size();
+		return m_trainingInds.size();
 	}
 
 	unsigned int CrossValidation::getNumTestingInstances(){
-		return m_testingInstances.size();
+		return m_testingInds.size();
 	}
 
 	bool CrossValidation::advance(){
@@ -29,23 +29,23 @@ namespace SVM_Framework{
 			return false;
 		m_currentFold++;
 
-		m_testingInstances.clear();
-		m_trainingInstances.clear();
+		m_testingInds.clear();
+		m_trainingInds.clear();
 
 		if(m_folds == m_currentFold){
 			int foldStart = (m_cl1Instances.size()/m_folds)*(m_currentFold-1);
 			for(unsigned int i=0; i<m_cl1Instances.size(); i++){
 				if(i >= foldStart)
-					m_testingInstances.push_back(m_cl1Instances[i]);
+					m_testingInds.push_back(m_cl1Instances[i]->getIndex());
 				else
-					m_trainingInstances.push_back(m_cl1Instances[i]);
+					m_trainingInds.push_back(m_cl1Instances[i]->getIndex());
 			}
 			foldStart = (m_cl2Instances.size()/m_folds)*(m_currentFold-1);
 			for(unsigned int i=0; i<m_cl2Instances.size(); i++){
 				if(i >= foldStart)
-					m_testingInstances.push_back(m_cl2Instances[i]);
+					m_testingInds.push_back(m_cl2Instances[i]->getIndex());
 				else
-					m_trainingInstances.push_back(m_cl2Instances[i]);
+					m_trainingInds.push_back(m_cl2Instances[i]->getIndex());
 			}
 		}
 		else{
@@ -53,22 +53,22 @@ namespace SVM_Framework{
 			int foldEnd = (m_cl1Instances.size()/m_folds)+foldStart;
 			for(unsigned int i=0; i<m_cl1Instances.size(); i++){
 				if(i >= foldStart && i < foldEnd)
-					m_testingInstances.push_back(m_cl1Instances[i]);
+					m_testingInds.push_back(m_cl1Instances[i]->getIndex());
 				else
-					m_trainingInstances.push_back(m_cl1Instances[i]);
+					m_trainingInds.push_back(m_cl1Instances[i]->getIndex());
 			}
 			foldStart = (m_cl2Instances.size()/m_folds)*(m_currentFold-1);
 			foldEnd = (m_cl2Instances.size()/m_folds)+foldStart;
 			for(unsigned int i=0; i<m_cl2Instances.size(); i++){
 				if(i >= foldStart && i < foldEnd)
-					m_testingInstances.push_back(m_cl2Instances[i]);
+					m_testingInds.push_back(m_cl2Instances[i]->getIndex());
 				else
-					m_trainingInstances.push_back(m_cl2Instances[i]);
+					m_trainingInds.push_back(m_cl2Instances[i]->getIndex());
 			}
 		}
 
 		std::wstringstream stream;
-		stream << "Training instance: " << m_trainingInstances.size() << " Testing instances: " << m_testingInstances.size() << " for fold " << m_currentFold << "\r\n";
+		stream << "Training instance: " << m_trainingInds.size() << " Testing instances: " << m_testingInds.size() << " for fold " << m_currentFold << "\r\n";
 		m_dataPack->m_gui->postDebugMessage(stream.str());
 
 		return true;

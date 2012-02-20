@@ -2,7 +2,7 @@
 #include "Instance.h"
 
 namespace SVM_Framework{
-	Instance::Instance(int classInd, unsigned int size):m_weight(1.0),m_classInd(classInd),m_classValue(NULL){
+	Instance::Instance(int classInd, unsigned int size, unsigned int index):m_index(index),m_weight(1.0),m_classInd(classInd),m_classValue(NULL){
 		m_valueVector.reserve(size);
 	}
 
@@ -33,7 +33,7 @@ namespace SVM_Framework{
 		return m_valueVector[ind] ? false : true;
 	}
 
-	unsigned int Instance::index(unsigned int pos){
-		return pos;
+	unsigned int Instance::getIndex(){
+		return m_index;
 	}
 }

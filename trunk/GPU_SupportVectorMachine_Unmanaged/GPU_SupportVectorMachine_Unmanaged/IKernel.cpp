@@ -107,14 +107,12 @@ namespace SVM_Framework{
 		int n1 = inst1->numValues();
 		int n2 = inst2->numValues();
 		for (int p1 = 0, p2 = 0; p1 < n1 && p2 < n2;) {
-			int ind1 = inst1->index(p1);
-			int ind2 = inst2->index(p2);
-			if (ind1 == ind2) {
+			if (p1 == p2) {
 				result += inst1->getValue(p1) * inst2->getValue(p2);
 				p1++;
 				p2++;
 			} 
-			else if (ind1 > ind2) {
+			else if (p1 > p2) {
 				p2++;
 			} 
 			else {

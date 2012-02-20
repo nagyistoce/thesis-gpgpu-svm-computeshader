@@ -36,12 +36,12 @@ namespace SVM_Framework{
 	}
 
 	void DataDocument::buildInstances(){
-		InstancePtr inst = InstancePtr(new Instance(m_classAttributeId,m_attributes.size()));
+		InstancePtr inst = InstancePtr(new Instance(m_classAttributeId,m_attributes.size(),0));
 		m_instances.reserve(m_data.size()/m_attributes.size());
 		for(unsigned int i=0; i<m_data.size(); i++){
 			if(i != 0 && (i % m_attributes.size()) == 0){
 				m_instances.push_back(inst);
-				inst = InstancePtr(new Instance(m_classAttributeId,m_attributes.size()));
+				inst = InstancePtr(new Instance(m_classAttributeId,m_attributes.size(),m_instances.size()));
 				if(m_missing.find(i) == m_missing.end())
 					inst->insertValue(&m_data[i]);
 				else

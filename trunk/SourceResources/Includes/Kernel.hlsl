@@ -3,8 +3,10 @@
 float dotProd(uint i1,uint i2){
 	float result = 0;
 
-	for(uint i=0; i<instanceLength; i++)
-		result += i1*i2;
+	for(uint i=0; i<instanceLength; i++){
+		if(i != classIndex)
+			result += inputBuffer[(instanceLength*i1)+i]*inputBuffer[(instanceLength*i2)+i];
+	}
 
 	return result;
 }

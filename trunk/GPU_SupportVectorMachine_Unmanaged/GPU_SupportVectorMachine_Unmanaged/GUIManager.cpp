@@ -19,7 +19,7 @@ namespace SVM_Framework{
 		addWindow(IDC_EDIT_PARAM2,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,245,7,100,21,L"1.0");
 		addWindow(IDC_EDIT_PARAM3,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,350,7,100,21,L"1.0");
 
-		addWindow(IDC_EDIT_FILEPATH,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,455,7,580,21,L"E:/Projekts/DSV/Current/Exjobb/Program/Training files/DataSets/cox2_corina.smi_class.cansmi.ecfi1024.rex_class.txt");
+		addWindow(IDC_EDIT_FILEPATH,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,455,7,580,21,L"E:/Projekts/DSV/Current/Exjobb/Program/Training files/oselma_short.txt");
 
 		addWindow(IDC_STATIC_INFOTEXT,L"EDIT",0,ES_MULTILINE|WS_VSCROLL|WS_BORDER|WS_VISIBLE|WS_CHILD,10,35,505,740,L"");
 		addWindow(IDC_STATIC_DEBUG,L"EDIT",0,ES_MULTILINE|WS_VSCROLL|WS_BORDER|WS_VISIBLE|WS_CHILD,530,35,505,740,L"");
@@ -27,7 +27,7 @@ namespace SVM_Framework{
 
 	void GUIManager::launchAlgo(){
 		AlgorithmDataPackPtr data = AlgorithmDataPackPtr(new AlgorithmDataPack);
-		data->m_algoName = "CPUSVM";
+		data->m_algoName = "DX11SVM";
 		std::stringstream ss;
 		ss << getEditText(IDC_EDIT_FILEPATH);
 		data->m_dataResource = ss.str();

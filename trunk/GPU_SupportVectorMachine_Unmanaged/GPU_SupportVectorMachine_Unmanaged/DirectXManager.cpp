@@ -77,6 +77,10 @@ namespace SVM_Framework{
 	void DirectXManager::setComputeShaderConstantBuffers(std::vector<ID3D11Buffer*> &buffers){
 		m_adapters.back().m_context->CSSetConstantBuffers(0,buffers.size(),&buffers[0]);
 	}
+
+	void DirectXManager::setComputeShaderResourceViews(std::vector<ID3D11ShaderResourceView*> &views){
+		m_adapters.back().m_context->CSSetShaderResources(0,views.size(),&views[0]);
+	}
 	
 	void DirectXManager::setComputeShaderUnorderedAccessViews(std::vector<ID3D11UnorderedAccessView*> &views){
 		unsigned int viewInt = -1;

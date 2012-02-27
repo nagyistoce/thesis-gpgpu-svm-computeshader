@@ -18,6 +18,7 @@ namespace SVM_Framework{
 		addWindow(IDC_EDIT_PARAM1,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,140,7,100,21,L"puk");
 		addWindow(IDC_EDIT_PARAM2,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,245,7,100,21,L"1.0");
 		addWindow(IDC_EDIT_PARAM3,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,350,7,100,21,L"1.0");
+		addWindow(IDC_EDIT_ALGO,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,1050,7,100,21,L"DX11SVM");
 
 		addWindow(IDC_EDIT_FILEPATH,L"EDIT",WS_EX_CLIENTEDGE,WS_VISIBLE|WS_CHILD,455,7,580,21,L"E:/Projekts/DSV/Current/Exjobb/Program/Training files/oselma_short.txt");
 
@@ -27,7 +28,7 @@ namespace SVM_Framework{
 
 	void GUIManager::launchAlgo(){
 		AlgorithmDataPackPtr data = AlgorithmDataPackPtr(new AlgorithmDataPack);
-		data->m_algoName = "DX11SVM";
+		data->m_algoName = getEditText(IDC_EDIT_ALGO);
 		std::stringstream ss;
 		ss << getEditText(IDC_EDIT_FILEPATH);
 		data->m_dataResource = ss.str();

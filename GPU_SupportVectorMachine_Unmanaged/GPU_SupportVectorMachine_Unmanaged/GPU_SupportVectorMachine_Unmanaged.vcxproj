@@ -193,8 +193,12 @@
   <ItemGroup>
     <None Include="..\..\SourceResources\Includes\Kernel.hlsl" />
     <None Include="..\..\SourceResources\Includes\SMO_Buffers.hlsl" />
-    <None Include="..\..\SourceResources\Shaders\SMO_Test.hlsl" />
-    <None Include="..\..\SourceResources\Shaders\SMO_Train.hlsl" />
+    <None Include="..\..\SourceResources\Shaders\SMO_FindBI.hlsl" />
+    <None Include="..\..\SourceResources\Shaders\SMO_KernelEvals.hlsl" />
+    <None Include="..\..\SourceResources\Shaders\SMO_SVMOutput.hlsl" />
+    <None Include="..\..\SourceResources\Shaders\SMO_test_init.hlsl" />
+    <None Include="..\..\SourceResources\Shaders\SMO_train_init.hlsl" />
+    <None Include="..\..\SourceResources\Shaders\SMO_UpdateError.hlsl" />
     <None Include="GPU_SupportVectorMachine_Unmanaged.ico" />
     <None Include="small.ico" />
   </ItemGroup>

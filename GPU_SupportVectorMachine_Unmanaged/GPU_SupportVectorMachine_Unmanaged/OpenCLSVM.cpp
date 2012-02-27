@@ -14,15 +14,27 @@ namespace SVM_Framework{
 		
 	}
 
-	int OpenCLSVM::examineExample(int i2){
+	void OpenCLSVM::lagrangeThresholdUpdate(double p1, double p2, int id, int i1, int i2){
+		
+	}
+
+	void OpenCLSVM::updateErrorCache(float f, int i, int id){
+		
+	}
+
+	double OpenCLSVM::SVMOutput(int index, InstancePtr inst, int id){
 		return 0;
 	}
 
-	int OpenCLSVM::takeStep(int i1, int i2, double F2){
-		return 0;
+	void OpenCLSVM::testInstances(int id){
+		
 	}
 
-	double OpenCLSVM::SVMOutput(int index, InstancePtr inst){
-		return 0;
+	void OpenCLSVM::initializeFold(int id){
+		
+	}
+
+	void OpenCLSVM::endFold(int id){
+		
 	}
 }

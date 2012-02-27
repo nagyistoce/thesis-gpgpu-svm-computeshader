@@ -11,14 +11,17 @@ namespace SVM_Framework{
 
 		virtual double evaluate(int i1, int i2, InstancePtr inst) = 0;
 		virtual void setParameters(double p1, double p2 = 1.0, double p3 = 1.0) = 0;
+		virtual double getParameter(int i) = 0;
 
 		void initKernel(IEvaluationPtr data);
+		void resetCounters();
 
+		unsigned int getId() { return m_id; }
 		unsigned int getKernelEvals() { return m_kernelEval; }
 		unsigned int getCacheHits() { return m_cacheHits; }
-	protected:
-		double dotProd(InstancePtr inst1, InstancePtr inst2);
 
+		double dotProd(InstancePtr inst1, InstancePtr inst2);
+	protected:
 		IEvaluationPtr m_data;
 		std::vector<double> m_kernelPrecalc;
 
@@ -33,6 +36,8 @@ namespace SVM_Framework{
 
 		long m_cacheHits;
 		long m_kernelEval;
+
+		unsigned int m_id;
 	};
 }
 

@@ -5,6 +5,7 @@ namespace SVM_Framework{
 	PuKKernel::PuKKernel(){
 		m_omega = 1.0;
 		m_sigma = 1.0;
+		m_id = 0;
 
 		computeFactor();
 	}
@@ -32,6 +33,17 @@ namespace SVM_Framework{
 		m_omega = p1;
 		m_sigma = p2;
 		computeFactor();
+	}
+
+	double PuKKernel::getParameter(int i){
+		switch(i){
+		case 0:
+			return m_factor;
+		case 1:
+			return m_omega;
+		default:
+			return 1.0;
+		}
 	}
 
 	void PuKKernel::computeFactor(){

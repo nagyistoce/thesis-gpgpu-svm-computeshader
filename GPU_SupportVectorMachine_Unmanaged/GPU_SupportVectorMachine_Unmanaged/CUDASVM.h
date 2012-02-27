@@ -10,9 +10,12 @@ namespace SVM_Framework{
 
 	protected:
 		void execute();
-		int examineExample(int i2);
-		int takeStep(int i1, int i2, double F2);
-		double SVMOutput(int index, InstancePtr inst);
+		void lagrangeThresholdUpdate(double p1, double p2, int id, int i1, int i2);
+		void initializeFold(int id);
+		void endFold(int id);
+		void updateErrorCache(float f, int i, int id);
+		double SVMOutput(int index, InstancePtr inst, int id);
+		void testInstances(int id);
 	private:
 	};
 }

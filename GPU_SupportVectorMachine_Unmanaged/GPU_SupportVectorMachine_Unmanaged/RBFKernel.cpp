@@ -4,6 +4,7 @@
 namespace SVM_Framework{
 	RBFKernel::RBFKernel(){
 		m_gamma = 0.1;
+		m_id = 1;
 	}
 
 	double RBFKernel::evaluate(int i1, int i2, InstancePtr inst){
@@ -25,5 +26,9 @@ namespace SVM_Framework{
 
 	void RBFKernel::setParameters(double p1, double p2, double p3){
 		m_gamma = p1;
+	}
+
+	double RBFKernel::getParameter(int i){
+		return m_gamma;
 	}
 }

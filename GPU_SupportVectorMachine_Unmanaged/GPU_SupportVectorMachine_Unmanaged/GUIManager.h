@@ -9,6 +9,7 @@
 #define IDC_EDIT_PARAM2 9375
 #define IDC_EDIT_PARAM3 9475
 #define IDC_EDIT_FILEPATH 9234
+#define IDC_EDIT_ALGO 9753
 
 namespace SVM_Framework{
 	class GUIManager{

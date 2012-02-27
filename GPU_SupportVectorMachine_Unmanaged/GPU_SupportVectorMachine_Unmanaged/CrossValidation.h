@@ -17,17 +17,12 @@ namespace SVM_Framework{
 
 		void setNumFolds(unsigned int folds);
 		void setFold(unsigned int fold);
-
-		std::vector<unsigned int>& getTrainingInds() { return m_trainingInds; }
-		std::vector<unsigned int>& getTestingInds() { return m_testingInds; }
 	private:
 		unsigned int	m_folds;
 		unsigned int	m_currentFold;
 
 		std::vector<InstancePtr>	m_cl1Instances,
 									m_cl2Instances;
-		std::vector<unsigned int>	m_trainingInds,
-									m_testingInds;
 	};
 }
 

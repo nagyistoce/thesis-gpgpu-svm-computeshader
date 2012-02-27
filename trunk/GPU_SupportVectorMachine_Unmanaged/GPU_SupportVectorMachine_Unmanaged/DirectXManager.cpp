@@ -64,6 +64,9 @@ namespace SVM_Framework{
 			assert(0);
 			return;
 		}
+
+		//D3D11_FEATURE_DATA_DOUBLES doubleSupport;
+		//m_adapters.back().m_deviceHandle->CheckFeatureSupport(D3D11_FEATURE_DOUBLES,&doubleSupport,sizeof(doubleSupport));
 	}
 
 	void DirectXManager::launchComputation(int x, int y, int z){
@@ -83,8 +86,13 @@ namespace SVM_Framework{
 	}
 	
 	void DirectXManager::setComputeShaderUnorderedAccessViews(std::vector<ID3D11UnorderedAccessView*> &views){
-		unsigned int viewInt = -1;
-		m_adapters.back().m_context->CSSetUnorderedAccessViews(0,views.size(),&views[0],&viewInt);
+		if(!views.empty()){
+			unsigned int viewInt = -1;
+			m_adapters.back().m_context->CSSetUnorderedAccessViews(0,views.size(),&views[0],&viewInt);
+		}
+		else{
+			m_adapters.back().m_context->CSSetUnorderedAccessViews(0,0,NULL,NULL);
+		}
 	}
 
 	HRESULT DirectXManager::createComputeShader(std::string filename, ID3D11ComputeShader** ppShader){

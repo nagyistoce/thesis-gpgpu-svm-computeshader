@@ -15,9 +15,14 @@ namespace SVM_Framework{
 		virtual void init() = 0;
 
 		void setData(DataDocumentPtr data, IDataPackPtr dataPack){	m_dataPack = dataPack; m_data = data; init(); }
+		std::vector<unsigned int>& getTrainingInds() { return m_trainingInds; }
+		std::vector<unsigned int>& getTestingInds() { return m_testingInds; }
 	protected:
 		IDataPackPtr m_dataPack;
 		DataDocumentPtr m_data;
+
+		std::vector<unsigned int>	m_trainingInds,
+									m_testingInds;
 	};
 }
 

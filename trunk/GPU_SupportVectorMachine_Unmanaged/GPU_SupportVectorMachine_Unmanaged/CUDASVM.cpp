@@ -14,15 +14,27 @@ namespace SVM_Framework{
 		
 	}
 
-	int CUDASVM::examineExample(int i2){
+	void CUDASVM::lagrangeThresholdUpdate(double p1, double p2, int id, int i1, int i2){
+		
+	}
+
+	void CUDASVM::updateErrorCache(float f, int i, int id){
+		
+	}
+
+	double CUDASVM::SVMOutput(int index, InstancePtr inst, int id){
 		return 0;
 	}
 
-	int CUDASVM::takeStep(int i1, int i2, double F2){
-		return 0;
+	void CUDASVM::testInstances(int id){
+		
 	}
 
-	double CUDASVM::SVMOutput(int index, InstancePtr inst){
-		return 0;
+	void CUDASVM::initializeFold(int id){
+		
+	}
+
+	void CUDASVM::endFold(int id){
+		
 	}
 }

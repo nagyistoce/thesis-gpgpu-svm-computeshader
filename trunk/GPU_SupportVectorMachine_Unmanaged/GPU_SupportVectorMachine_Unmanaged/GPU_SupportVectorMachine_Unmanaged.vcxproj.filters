@@ -89,22 +89,25 @@
     <None Include="..\..\SourceResources\Includes\SMO_Buffers.hlsl">
       <Filter>Resource Files\Shaders\Includes</Filter>
     </None>
-    <None Include="..\..\SourceResources\Shaders\SMO_KernelEvals.hlsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
     <None Include="..\..\SourceResources\Shaders\SMO_SVMOutput.hlsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="..\..\SourceResources\Shaders\SMO_train_init.hlsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="..\..\SourceResources\Shaders\SMO_test_init.hlsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="..\..\SourceResources\Shaders\SMO_UpdateError.hlsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="..\..\SourceResources\Shaders\SMO_FindBI.hlsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\SourceResources\Shaders\SMO_KernelEvaluations.hlsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\SourceResources\Shaders\SMO_UpdateErrorCache.hlsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\SourceResources\Shaders\SMO_Test.hlsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\SourceResources\Shaders\SMO_SelfProd.hlsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

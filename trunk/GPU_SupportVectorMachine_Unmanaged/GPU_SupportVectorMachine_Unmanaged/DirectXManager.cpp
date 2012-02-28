@@ -86,13 +86,44 @@ namespace SVM_Framework{
 	}
 	
 	void DirectXManager::setComputeShaderUnorderedAccessViews(std::vector<ID3D11UnorderedAccessView*> &views){
-		if(!views.empty()){
-			unsigned int viewInt = -1;
-			m_adapters.back().m_context->CSSetUnorderedAccessViews(0,views.size(),&views[0],&viewInt);
+		unsigned int viewInt = -1;
+		m_adapters.back().m_context->CSSetUnorderedAccessViews(0,views.size(),&views[0],&viewInt);
+	}
+
+	void DirectXManager::setComputeShaderConstantBuffers(std::map<int,ID3D11Buffer*> &buffers){
+		std::vector<ID3D11Buffer*> setVec;
+		std::map<int,ID3D11Buffer*>::iterator itr = buffers.begin();
+
+		while(itr != buffers.end()){
+			setVec.push_back(itr->second);
+			itr++;
 		}
-		else{
-			m_adapters.back().m_context->CSSetUnorderedAccessViews(0,0,NULL,NULL);
+
+		setComputeShaderConstantBuffers(setVec);
+	}
+	
+	void DirectXManager::setComputeShaderResourceViews(std::map<int,ID3D11ShaderResourceView*> &views){
+		std::vector<ID3D11ShaderResourceView*> setVec;
+		std::map<int,ID3D11ShaderResourceView*>::iterator itr = views.begin();
+
+		while(itr != views.end()){
+			setVec.push_back(itr->second);
+			itr++;
 		}
+
+		setComputeShaderResourceViews(setVec);
+	}
+
+	void DirectXManager::setComputeShaderUnorderedAccessViews(std::map<int,ID3D11UnorderedAccessView*> &views){
+		std::vector<ID3D11UnorderedAccessView*> setVec;
+		std::map<int,ID3D11UnorderedAccessView*>::iterator itr = views.begin();
+
+		while(itr != views.end()){
+			setVec.push_back(itr->second);
+			itr++;
+		}
+
+		setComputeShaderUnorderedAccessViews(setVec);
 	}
 
 	HRESULT DirectXManager::createComputeShader(std::string filename, ID3D11ComputeShader** ppShader){

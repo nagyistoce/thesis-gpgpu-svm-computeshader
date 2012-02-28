@@ -14,10 +14,27 @@ namespace SVM_Framework{
 	void ISVM::run(AlgorithmDataPackPtr data){
 		m_data = data;
 		m_document = m_data->m_recMgr->getDocumentResource(m_data->m_dataResource);
-		
+		m_outputStream = std::wstringstream();
+
 		execute();
+		resultOutput();
+	}
 
+	void ISVM::resultOutput(){
+		m_outputStream << "\r\n\r\nTotal time: " << m_resultPack.totalTime;
 
+		m_outputStream	<< "\r\n\r\n" << m_document->m_cl1Value << "	" << m_document->m_cl2Value 
+						<< "\r\n" << m_resultPack.cl1Correct << "	" << m_resultPack.cl1Wrong << "	" << m_document->m_cl1Value 
+						<< "\r\n" << m_resultPack.cl2Wrong << "	" << m_resultPack.cl2Correct << "	" << m_document->m_cl2Value << "\r\n";
+		m_outputStream << "Accuracy: " << (float(m_resultPack.cl1Correct+m_resultPack.cl2Correct)/float(m_resultPack.cl1Correct+m_resultPack.cl2Correct+m_resultPack.cl1Wrong+m_resultPack.cl2Wrong))*100 << "%\r\n\r\n";
+		m_outputStream << "Total number tested: " << m_resultPack.cl1Correct+m_resultPack.cl2Correct+m_resultPack.cl1Wrong+m_resultPack.cl2Wrong << "\r\n";
+		m_outputStream << "Iteration count: " << m_resultPack.iterations << "\r\n";
+		m_outputStream << "Support vectors: " << m_resultPack.supportVectors << "\r\n";
+		m_outputStream << "Cachehits: " << m_resultPack.cacheHits << " (" << (double(m_resultPack.cacheHits)/double((m_resultPack.cacheHits)+(m_resultPack.kernelEvals+1)))*100 << "%)\r\n";
+		m_outputStream <<	"Kernel evals: " << m_resultPack.kernelEvals;
+		m_data->m_gui->setText(IDC_STATIC_INFOTEXT,m_outputStream.str());
+
+		m_resultPack = ResultsPack();
 	}
 
 	int ISVM::examineExample(int i2, int id){
@@ -115,9 +132,15 @@ namespace SVM_Framework{
 			return 0;
 		}
 
+		std::vector<int> inds;
+		inds.push_back(i1);
+		inds.push_back(i2);
+		std::vector<float> results;
+		kernelEvaluations(inds,results,id);
+
 		// Compute second derivative of objective function
 		k11 = m_params[id].m_kernel->eval(i1, i1, m_params[id].m_evaluation->getTrainingInstance(i1));
-		k12 = m_params[id].m_kernel->eval(i1, i2, m_params[id].m_evaluation->getTrainingInstance(i1));
+		k12 = results[0];
 		k22 = m_params[id].m_kernel->eval(i2, i2, m_params[id].m_evaluation->getTrainingInstance(i2));
 		eta = 2 * k12 - k11 - k22;
 
@@ -357,7 +380,10 @@ namespace SVM_Framework{
 
 		initialize(id);
 		initializeFold(id);
-
+		
+		unsigned int foldTimer = ConfigManager::startTimer();
+		m_outputStream << "Training fold " << m_params[id].m_evaluation->getStage() << ": ";
+		m_data->m_gui->setText(IDC_STATIC_INFOTEXT,m_outputStream.str());
 		// Loop to find all the support vectors
 		int numChanged = 0;
 		boolean examineAll = true;
@@ -396,10 +422,18 @@ namespace SVM_Framework{
 				examineAll = true;
 			}
 		}
+		m_outputStream << ConfigManager::getTime(foldTimer) << " -- ";
+		ConfigManager::resetTimer(foldTimer);
 
 		// Set threshold
 		m_params[id].m_b = (m_params[id].m_bLow + m_params[id].m_bUp) / 2.0;
+		m_outputStream << "Testing fold " << m_params[id].m_evaluation->getStage() << ": ";
+		m_data->m_gui->setText(IDC_STATIC_INFOTEXT,m_outputStream.str());
 		testInstances(id);
+
+		m_outputStream << ConfigManager::getTime(foldTimer) << "\r\n";
+		ConfigManager::removeTimer(foldTimer);
+		m_data->m_gui->setText(IDC_STATIC_INFOTEXT,m_outputStream.str());
 
 		endFold(id);
 	}

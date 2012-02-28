@@ -17,6 +17,8 @@ namespace SVM_Framework{
 
 		void setNumFolds(unsigned int folds);
 		void setFold(unsigned int fold);
+
+		unsigned int getStage() { return m_currentFold; }
 	private:
 		unsigned int	m_folds;
 		unsigned int	m_currentFold;

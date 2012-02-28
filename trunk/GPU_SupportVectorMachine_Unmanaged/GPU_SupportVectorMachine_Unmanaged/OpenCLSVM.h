@@ -16,6 +16,7 @@ namespace SVM_Framework{
 		void updateErrorCache(float f, int i, int id);
 		double SVMOutput(int index, InstancePtr inst, int id);
 		void testInstances(int id);
+		void kernelEvaluations(std::vector<int> &inds, std::vector<float> &result, int id);
 	private:
 	};
 }

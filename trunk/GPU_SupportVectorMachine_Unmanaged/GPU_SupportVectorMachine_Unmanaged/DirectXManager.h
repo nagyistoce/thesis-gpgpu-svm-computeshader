@@ -22,6 +22,10 @@ namespace SVM_Framework{
 		void setComputeShaderResourceViews(std::vector<ID3D11ShaderResourceView*> &views);
 		void setComputeShaderUnorderedAccessViews(std::vector<ID3D11UnorderedAccessView*> &views);
 
+		void setComputeShaderConstantBuffers(std::map<int,ID3D11Buffer*> &buffers);
+		void setComputeShaderResourceViews(std::map<int,ID3D11ShaderResourceView*> &views);
+		void setComputeShaderUnorderedAccessViews(std::map<int,ID3D11UnorderedAccessView*> &views);
+
 		// Helpers
 		template <class T>
 		void copyFromGraphicsCard(ID3D11Buffer* buffer, std::vector<T> &copy){

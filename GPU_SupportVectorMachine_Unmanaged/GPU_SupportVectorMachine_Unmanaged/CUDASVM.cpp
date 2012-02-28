@@ -30,6 +30,10 @@ namespace SVM_Framework{
 		
 	}
 
+	void CUDASVM::kernelEvaluations(std::vector<int> &inds, std::vector<float> &result, int id){
+	
+	}
+
 	void CUDASVM::initializeFold(int id){
 		
 	}

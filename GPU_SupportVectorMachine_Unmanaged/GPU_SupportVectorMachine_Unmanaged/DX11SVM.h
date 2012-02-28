@@ -8,8 +8,8 @@ namespace SVM_Framework{
 		DX11SVM(GraphicsManagerPtr dxMgr);
 		~DX11SVM();
 
-		enum GBuffers	{	
-							GB_TrainingIndices,
+		enum GResources	{	
+							GB_TrainingIndices = 0,
 							GB_TestingIndices,
 							GB_OutputBuffer,
 							GB_ErrorBuffer,
@@ -17,7 +17,32 @@ namespace SVM_Framework{
 							GB_ClassBuffer,
 							GB_AlphaBuffer,
 							GB_DataBuffer,
-							GB_InputInds
+							GB_InputInds,
+							GB_FindBI,
+
+							GS_ErrorUpdate,
+							GS_SelfProd,
+							GS_Testing,
+							GS_SVMOutput,
+							GS_FindBI,
+							GS_UpdateErrorCache,
+							GS_KernelEvaluations,
+
+							CB_Shared,
+
+							// Order dependent! Same as shader order
+							UAV_SelfProd,
+							UAV_Error,
+							UAV_Output,
+							UAV_FindBI,
+
+							// Order dependent! Same as shader order
+							SRV_Data,
+							SRV_InputInds,
+							SRV_TrainingIndices,
+							SRV_TestingIndices,
+							SRV_Class,
+							SRV_Alpha
 						};
 
 		// Shader buffers
@@ -49,15 +74,17 @@ namespace SVM_Framework{
 		void updateErrorCache(float f, int i, int id);
 		double SVMOutput(int index, InstancePtr inst, int id);
 		void testInstances(int id);
+		void kernelEvaluations(std::vector<int> &inds, std::vector<float> &result, int id);
 	private:
 		void initGPUResources();
+		void cleanGPUResources();
 
-		std::vector<ID3D11ComputeShader*> m_shaders;
+		std::map<int,ID3D11ComputeShader*> m_shaders;
 
-		std::vector<ID3D11ShaderResourceView*> m_resourceViews;
-		std::vector<ID3D11UnorderedAccessView*> m_accessViews;
-		std::map<GBuffers,ID3D11Buffer*> m_buffers;
-		std::vector<ID3D11Buffer*> m_constantBuffers;
+		std::map<int,ID3D11ShaderResourceView*> m_resourceViews;
+		std::map<int,ID3D11UnorderedAccessView*> m_accessViews;
+		std::map<int,ID3D11Buffer*> m_buffers;
+		std::map<int,ID3D11Buffer*> m_constantBuffers;
 
 		std::vector<SharedBuffer> m_sharedBuffer;
 

@@ -28,7 +28,7 @@ StructuredBuffer<uint>				b_testingIndices : register(t3);
 StructuredBuffer<float>				b_class : register(t4);
 StructuredBuffer<float>				b_alpha : register(t5);
 
-//RWStructuredBuffer<algorithmParams>	b_algoParamBuffer : register(u0);
 RWStructuredBuffer<float>			b_selfProd : register(u0);
 RWStructuredBuffer<float>			b_errorBuffer : register(u1);
 RWStructuredBuffer<float>			b_outputBuffer : register(u2);
+RWStructuredBuffer<algorithmParams>	b_algoParamBuffer : register(u3);

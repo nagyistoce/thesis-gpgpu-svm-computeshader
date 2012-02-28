@@ -30,6 +30,10 @@ namespace SVM_Framework{
 		
 	}
 
+	void OpenCLSVM::kernelEvaluations(std::vector<int> &inds, std::vector<float> &result, int id){
+	
+	}
+
 	void OpenCLSVM::initializeFold(int id){
 		
 	}

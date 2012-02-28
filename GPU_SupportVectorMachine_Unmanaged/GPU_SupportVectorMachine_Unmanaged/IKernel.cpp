@@ -2,8 +2,8 @@
 #include "IKernel.h"
 
 namespace SVM_Framework{
-	IKernel::IKernel():m_cacheActivated(false),m_fullCache(false){
-		m_cacheSize = 2000000;
+	IKernel::IKernel():m_cacheActivated(true),m_fullCache(false){
+		m_cacheSize = 2000;
 		m_cacheSlots = 4;
 
 		if(m_cacheActivated && !m_fullCache){
@@ -18,6 +18,9 @@ namespace SVM_Framework{
 	}
 
 	double IKernel::eval(int i1, int i2, InstancePtr inst){
+		if(i1 == i2)
+			return evaluate(i1,i2,inst);
+
 		if(i1 >= 0 && m_cacheActivated){
 			double result;
 			if(m_fullCache){
@@ -92,7 +95,7 @@ namespace SVM_Framework{
 
 		for(unsigned int i = 0; i < m_data->getNumTrainingInstances(); i++)
 			m_kernelPrecalc.push_back(dotProd(m_data->getTrainingInstance(i), m_data->getTrainingInstance(i)));
-
+		
 		if(m_cacheActivated && m_fullCache){
 			m_kernelMatrix.assign(m_data->getNumTrainingInstances(),std::vector<double>());
 			for(unsigned int i = 0; i < m_data->getNumTrainingInstances(); i++) {

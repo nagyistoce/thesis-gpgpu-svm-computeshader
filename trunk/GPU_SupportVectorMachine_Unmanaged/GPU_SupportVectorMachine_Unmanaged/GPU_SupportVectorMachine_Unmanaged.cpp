@@ -161,6 +161,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case IDC_BUTTON_RUN:
 			guiManager->launchAlgo();
 			break;
+		case IDC_BUTTON_STOP:
+			guiManager->stopAlgo();
+			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}

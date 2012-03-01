@@ -29,10 +29,10 @@ namespace SVM_Framework{
 			for(unsigned int i=0; i<5; i++){
 				m_params[i].m_evaluation = IEvaluationPtr(new CrossValidation(10));
 				m_params[i].m_evaluation->setData(m_document,m_data);
-				boost::static_pointer_cast<CrossValidation>(m_params[i].m_evaluation)->setFold(i);
+				m_params[i].m_evaluation->setStage(i);
 
 				m_threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(
-					boost::bind(&CPUSVM::executeFold,this,i)
+					boost::bind(&CPUSVM::executeStage,this,i)
 				)));
 				if(SetThreadPriority(m_threads.back()->native_handle(),THREAD_PRIORITY_BELOW_NORMAL) == 0){
 					assert(0);
@@ -57,10 +57,10 @@ namespace SVM_Framework{
 			for(unsigned int i=0; i<5; i++){
 				m_params[i].m_evaluation = IEvaluationPtr(new CrossValidation(10));
 				m_params[i].m_evaluation->setData(m_document,m_data);
-				boost::static_pointer_cast<CrossValidation>(m_params[i].m_evaluation)->setFold(i+5);
+				m_params[i].m_evaluation->setStage(i+5);
 
 				m_threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(
-					boost::bind(&CPUSVM::executeFold,this,i)
+					boost::bind(&CPUSVM::executeStage,this,i)
 				)));
 				if(SetThreadPriority(m_threads.back()->native_handle(),THREAD_PRIORITY_BELOW_NORMAL) == 0){
 					assert(0);
@@ -87,9 +87,9 @@ namespace SVM_Framework{
 			m_params[0].m_evaluation = IEvaluationPtr(new CrossValidation(10));
 			m_params[0].m_evaluation->setData(m_document,m_data);
 			std::wstringstream stream;
-			for(unsigned int i=0; i<10; i++){
-				boost::static_pointer_cast<CrossValidation>(m_params[0].m_evaluation)->setFold(i);
-				executeFold(0);
+			for(unsigned int i=0; i<m_params[0].m_evaluation->getNumStages(); i++){
+				m_params[0].m_evaluation->setStage(i);
+				executeStage(0);
 				m_resultPack.cl1Correct += m_params[0].cl1Correct;
 				m_resultPack.cl2Correct += m_params[0].cl2Correct;
 				m_resultPack.cl1Wrong += m_params[0].cl1Wrong;

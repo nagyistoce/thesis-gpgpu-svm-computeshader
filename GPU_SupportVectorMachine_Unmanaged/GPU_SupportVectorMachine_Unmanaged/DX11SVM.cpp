@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DX11SVM.h"
 #include "CrossValidation.h"
+#include "PercentageSplit.h"
 #include "ConfigManager.h"
 #include "GUIManager.h"
 
@@ -52,15 +53,39 @@ namespace SVM_Framework{
 	}
 
 	void DX11SVM::execute(){
+		cleanGPUResources();
+
 		initGPUResources();
 		unsigned int timerId = ConfigManager::startTimer();
 
 		m_params.assign(1,AlgoParams());
-		m_params[0].m_evaluation = IEvaluationPtr(new CrossValidation(10));
+
+		std::string eval = m_data->m_gui->getEditText(IDC_COMBO_EVALUATION);
+		if(eval.compare("CrossValidation") == 0){
+			unsigned int folds = 0;
+			try{
+				folds = boost::lexical_cast<unsigned int>(m_data->m_gui->getEditText(IDC_EDIT_EVALPARAM));
+			}catch(...){
+				folds = 10;
+			}
+			m_params[0].m_evaluation = IEvaluationPtr(new CrossValidation(folds));
+		}
+		else if(eval.compare("PercentageSplit") == 0){
+			float percent = 0;
+			try{
+				percent = boost::lexical_cast<float>(m_data->m_gui->getEditText(IDC_EDIT_EVALPARAM));
+			}catch(...){
+				percent = 66;
+			}
+			m_params[0].m_evaluation = IEvaluationPtr(new PercentageSplit(percent));
+		}
+		else{
+			m_params[0].m_evaluation = IEvaluationPtr(new CrossValidation(10));
+		}
 		m_params[0].m_evaluation->setData(m_document,m_data);
-		for(unsigned int i=0; i<10; i++){
-			boost::static_pointer_cast<CrossValidation>(m_params[0].m_evaluation)->setFold(i);
-			executeFold(0);
+		for(unsigned int i=0; i<m_params[0].m_evaluation->getNumStages(); i++){
+			m_params[0].m_evaluation->setStage(i);
+			executeStage(0);
 			m_resultPack.cl1Correct += m_params[0].cl1Correct;
 			m_resultPack.cl2Correct += m_params[0].cl2Correct;
 			m_resultPack.cl1Wrong += m_params[0].cl1Wrong;
@@ -115,11 +140,6 @@ namespace SVM_Framework{
 			m_sharedBuffer[0].cb_ind1 = 1;
 			m_sharedBuffer[0].instanceCount = groups;
 
-			//if(kernelEvals.size() == 264 && m_params[id].iterations == 10){
-			//	biParams.assign(groups,algorithmParams());
-			//	m_dxMgr->copyFromGraphicsCard(m_buffers[GB_FindBI],biParams);
-			//	biParams.clear();
-			//}
 			while(groups > 1){
 				groups = int(float(groups)/32.0f)+1;
 				m_dxMgr->copyToGraphicsCard(m_constantBuffers[CB_Shared],m_sharedBuffer);
@@ -141,28 +161,6 @@ namespace SVM_Framework{
 			m_params[id].m_iUp = biParams[0].s_iUp;
 			m_params[id].m_iLow = biParams[0].s_iLow;
 		}
-
-		//// Update thresholds
-		//m_params[id].m_bLow = -DBL_MAX; m_params[id].m_bUp = DBL_MAX;
-		//m_params[id].m_iLow = -1; m_params[id].m_iUp = -1;
-		//for (int j = m_params[id].m_I0->getNext(-1); j != -1; j = m_params[id].m_I0->getNext(j)) {
-		//	if (m_params[id].m_errors[j] < m_params[id].m_bUp) {
-		//		m_params[id].m_bUp = m_params[id].m_errors[j];
-		//		m_params[id].m_iUp = j;
-		//	}
-		//	if(m_params[id].m_errors[j] > m_params[id].m_bLow) {
-		//		m_params[id].m_bLow = m_params[id].m_errors[j];
-		//		m_params[id].m_iLow = j;
-		//	}
-		//}
-
-		//if(!biParams.empty()){
-		//	assert(biParams.size() == 1);
-		//	assert(abs(biParams[0].s_bUp)-abs(m_params[id].m_bUp) < 1.0e04);
-		//	assert(abs(biParams[0].s_bLow)-abs(m_params[id].m_bLow) < 1.0e04);
-		//	//assert(biParams[0].s_iUp == m_params[id].m_iUp);
-		//	//assert(biParams[0].s_iLow == m_params[id].m_iLow);
-		//}
 	}
 
 	void DX11SVM::updateErrorCache(float f, int i, int id){
@@ -215,6 +213,7 @@ namespace SVM_Framework{
 		for (int i = m_params[id].m_supportVectors->getNext(-1); i != -1; i = m_params[id].m_supportVectors->getNext(i)) {
 			vectorInds.push_back(i);
 		}
+		
 		m_dxMgr->copyToGraphicsCard(m_buffers[GB_InputInds],vectorInds);
 
 		m_sharedBuffer[0].instanceCount = m_params[id].m_evaluation->getNumTestingInstances();
@@ -249,18 +248,26 @@ namespace SVM_Framework{
 		}
 	}
 
+	void DX11SVM::performTestCycle(std::vector<int> &inds){
+		
+	}
+
 	void DX11SVM::kernelEvaluations(std::vector<int> &inds, std::vector<float> &result, int id){
 		if(inds.size() < 2)
 			return;
 
-		m_dxMgr->setComputeShader(m_shaders[GS_KernelEvaluations]);
+		for(unsigned int i=0; i<inds.size(); i+=2){
+			result.push_back(m_params[id].m_kernel->eval(inds[i], inds[i+1], m_params[id].m_evaluation->getTrainingInstance(inds[i])));
+		}
+
+		/*m_dxMgr->setComputeShader(m_shaders[GS_KernelEvaluations]);
 		m_sharedBuffer[0].instanceCount = inds.size()/2;
 		m_dxMgr->copyToGraphicsCard(m_constantBuffers[CB_Shared],m_sharedBuffer);
 		m_dxMgr->copyToGraphicsCard(m_buffers[GB_InputInds],inds);
 
 		m_dxMgr->launchComputation(int(float(float(inds.size())/2.0f)/32.0f)+1,1,1);
 		result.assign(inds.size()/2, 0);
-		m_dxMgr->copyFromGraphicsCard(m_buffers[GB_OutputBuffer],result);
+		m_dxMgr->copyFromGraphicsCard(m_buffers[GB_OutputBuffer],result);*/
 	}
 
 	void DX11SVM::initGPUResources(){

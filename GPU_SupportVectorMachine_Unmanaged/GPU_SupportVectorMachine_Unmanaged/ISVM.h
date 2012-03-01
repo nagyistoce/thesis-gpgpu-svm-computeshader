@@ -24,7 +24,7 @@ namespace SVM_Framework{
 		int takeStep(int i1, int i2, double F2, int id);
 
 		void initialize(unsigned int id);
-		void executeFold(unsigned int id);
+		void executeStage(unsigned int id);
 		void resultOutput();
 
 		double m_C;

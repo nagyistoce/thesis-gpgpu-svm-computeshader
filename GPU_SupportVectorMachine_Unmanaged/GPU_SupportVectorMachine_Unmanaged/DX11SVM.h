@@ -78,6 +78,7 @@ namespace SVM_Framework{
 	private:
 		void initGPUResources();
 		void cleanGPUResources();
+		void performTestCycle(std::vector<int> &inds);
 
 		std::map<int,ID3D11ComputeShader*> m_shaders;
 

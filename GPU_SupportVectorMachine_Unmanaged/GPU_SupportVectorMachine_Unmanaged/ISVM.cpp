@@ -16,8 +16,27 @@ namespace SVM_Framework{
 		m_document = m_data->m_recMgr->getDocumentResource(m_data->m_dataResource);
 		m_outputStream = std::wstringstream();
 
+		// Set C
+		try{
+			m_C = boost::lexical_cast<float>(m_data->m_gui->getEditText(IDC_EDIT_C));
+		}
+		catch(...){
+			m_C = 1.0;
+		}
+
 		execute();
 		resultOutput();
+
+		m_data->m_gui->enableWindow(IDC_BUTTON_RUN,true);
+		m_data->m_gui->enableWindow(IDC_EDIT_PARAM2,true);
+		m_data->m_gui->enableWindow(IDC_EDIT_PARAM3,true);
+		m_data->m_gui->enableWindow(IDC_EDIT_FILEPATH,true);
+		m_data->m_gui->enableWindow(IDC_EDIT_C,true);
+		m_data->m_gui->enableWindow(IDC_COMBO_KERNEL,true);
+		m_data->m_gui->enableWindow(IDC_EDIT_EVALPARAM,true);
+		m_data->m_gui->enableWindow(IDC_COMBO_EVALUATION,true);
+		m_data->m_gui->enableWindow(IDC_COMBO_ALGO,true);
+		m_data->m_gui->enableWindow(IDC_BUTTON_STOP,false);
 	}
 
 	void ISVM::resultOutput(){
@@ -346,10 +365,10 @@ namespace SVM_Framework{
 		}
 
 		ConfigManager::initialize();
-		std::string kernelName = m_data->m_gui->getEditText(IDC_EDIT_PARAM1);
-		if(kernelName.compare("puk") == 0)
+		std::string kernelName = m_data->m_gui->getEditText(IDC_COMBO_KERNEL);
+		if(kernelName.compare("Puk") == 0)
 			m_params[id].m_kernel = IKernelPtr(new PuKKernel);
-		else if(kernelName.compare("rbf") == 0)
+		else if(kernelName.compare("RBF") == 0)
 			m_params[id].m_kernel = IKernelPtr(new RBFKernel);
 		else
 			m_params[id].m_kernel = IKernelPtr(new PuKKernel);
@@ -370,7 +389,7 @@ namespace SVM_Framework{
 		m_params[id].m_kernel->setParameters(p1,p2);
 	}
 
-	void ISVM::executeFold(unsigned int id){
+	void ISVM::executeStage(unsigned int id){
 		m_params[id].m_evaluation->advance();
 		m_params[id].cl1Correct = 0;
 		m_params[id].cl2Correct = 0;
@@ -421,6 +440,10 @@ namespace SVM_Framework{
 			else if (numChanged == 0) {
 				examineAll = true;
 			}
+
+			boost::xtime xt;
+			boost::xtime_get(&xt, boost::TIME_UTC);
+			boost::thread::sleep(xt);
 		}
 		m_outputStream << ConfigManager::getTime(foldTimer) << " -- ";
 		ConfigManager::resetTimer(foldTimer);

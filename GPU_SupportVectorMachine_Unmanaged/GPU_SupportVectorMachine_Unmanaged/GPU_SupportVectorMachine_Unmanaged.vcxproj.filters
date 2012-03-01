@@ -220,6 +220,12 @@
     <ClInclude Include="ParserRDS.h">
       <Filter>Source Files\ResourceManager\Parsers</Filter>
     </ClInclude>
+    <ClInclude Include="PercentageSplit.h">
+      <Filter>Source Files\Algorithms\Evaluation</Filter>
+    </ClInclude>
+    <ClInclude Include="StopAlgorithmMessage.h">
+      <Filter>Source Files\Core\MessageManager\Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -293,6 +299,9 @@
     </ClCompile>
     <ClCompile Include="ParserRDS.cpp">
       <Filter>Source Files\ResourceManager\Parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="PercentageSplit.cpp">
+      <Filter>Source Files\Algorithms\Evaluation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

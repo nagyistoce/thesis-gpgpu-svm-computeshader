@@ -17,6 +17,7 @@ namespace SVM_Framework{
 		void initHandlers();
 		void parseMessages();
 		void addHandler(std::string messageId, MessageHandlerPtr handler);
+		void runThread(std::string message, IDataPackPtr dataPack);
 
 		bool m_endParsing;
 		std::list<FrameworkMessagePtr> m_messageStack;
@@ -29,6 +30,8 @@ namespace SVM_Framework{
 		MutexPtr m_messageStackMutex;
 		ThreadPtr m_messageParser;
 		ConditionPtr m_parseCondition;
+
+		std::map<std::string,boost::shared_ptr<boost::thread>> m_runningThreads;
 	};
 }
 

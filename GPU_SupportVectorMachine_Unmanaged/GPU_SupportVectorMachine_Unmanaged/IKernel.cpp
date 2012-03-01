@@ -2,7 +2,7 @@
 #include "IKernel.h"
 
 namespace SVM_Framework{
-	IKernel::IKernel():m_cacheActivated(true),m_fullCache(false){
+	IKernel::IKernel():m_cacheActivated(false),m_fullCache(false){
 		m_cacheSize = 2000;
 		m_cacheSlots = 4;
 

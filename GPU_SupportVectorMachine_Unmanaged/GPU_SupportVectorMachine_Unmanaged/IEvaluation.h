@@ -5,16 +5,18 @@
 namespace SVM_Framework{
 	class IEvaluation{
 	public:
-		virtual InstancePtr getTrainingInstance(unsigned int index) = 0;
-		virtual InstancePtr getTestingInstance(unsigned int index) = 0;
+		InstancePtr getTrainingInstance(unsigned int index) { return m_data->getInstance(m_trainingInds[index]); }
+		InstancePtr getTestingInstance(unsigned int index) { return m_data->getInstance(m_testingInds[index]); }
 
-		virtual unsigned int getNumTrainingInstances() = 0;
-		virtual unsigned int getNumTestingInstances() = 0;
+		unsigned int getNumTrainingInstances() { return m_trainingInds.size(); }
+		unsigned int getNumTestingInstances() { return m_testingInds.size(); }
 
 		virtual bool advance() = 0;
 		virtual void init() = 0;
 
-		virtual unsigned int getStage() = 0;
+		void setStage(unsigned int stage) { m_stage = stage; }
+		unsigned int getStage() { return m_stage; }
+		unsigned int getNumStages() { return m_numStages; }
 
 		void setData(DataDocumentPtr data, IDataPackPtr dataPack){	m_dataPack = dataPack; m_data = data; init(); }
 		std::vector<unsigned int>& getTrainingInds() { return m_trainingInds; }
@@ -25,6 +27,12 @@ namespace SVM_Framework{
 
 		std::vector<unsigned int>	m_trainingInds,
 									m_testingInds;
+
+		std::vector<InstancePtr>	m_cl1Instances,
+									m_cl2Instances;
+
+		unsigned int m_stage;
+		unsigned int m_numStages;
 	};
 }
 

@@ -9,9 +9,9 @@ namespace SVM_Framework{
 		void insertValue(Value* value);
 
 		int classValue();
-		double weight();
+		Value::v_precision weight();
 		unsigned int numValues();
-		double getValue(unsigned int ind);
+		Value::v_precision getValue(unsigned int ind);
 		bool missing(unsigned int ind);
 
 		unsigned int getIndex();
@@ -22,7 +22,7 @@ namespace SVM_Framework{
 
 		unsigned int m_classInd;
 		unsigned int m_index;
-		double m_weight;
+		Value::v_precision m_weight;
 
 		friend class DataDocument;
 	};

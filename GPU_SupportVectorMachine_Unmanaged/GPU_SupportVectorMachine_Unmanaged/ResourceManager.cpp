@@ -23,6 +23,8 @@ namespace SVM_Framework{
 	}
 
 	DataDocumentPtr ResourceManager::parseDocument(boost::filesystem::path path){
+		m_loadedDocuments.clear();
+
 		if(!boost::filesystem::exists(path)){
 			boost::filesystem::path path = findFilePath(path.filename().generic_string());
 			if(!boost::filesystem::exists(path)){

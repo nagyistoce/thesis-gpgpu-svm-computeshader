@@ -5,7 +5,7 @@
 namespace SVM_Framework{
 	class IKernel{
 	public:
-		IKernel();
+		IKernel(bool cache, bool fullCache);
 
 		double eval(int i1, int i2, InstancePtr inst);
 
@@ -19,6 +19,9 @@ namespace SVM_Framework{
 		unsigned int getId() { return m_id; }
 		unsigned int getKernelEvals() { return m_kernelEval; }
 		unsigned int getCacheHits() { return m_cacheHits; }
+
+		bool isCached(int i1, int i2, double &result);
+		void insertIntoCache(std::vector<unsigned int> &inds, std::vector<Value::v_precision> &values, int index, int index2 = -1);
 
 		double dotProd(InstancePtr inst1, InstancePtr inst2);
 	protected:
@@ -38,6 +41,10 @@ namespace SVM_Framework{
 		long m_kernelEval;
 
 		unsigned int m_id;
+
+		long m_key;
+		int m_location,
+			m_loc;
 	};
 }
 

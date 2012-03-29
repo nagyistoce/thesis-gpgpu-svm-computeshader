@@ -9,6 +9,7 @@ namespace SVM_Framework{
 		StartAlgorithmMessageHandler(GraphicsManagerPtr gfxMgr);
 
 		void handle(IDataPackPtr dataPack);
+		void stop();
 	private:
 		std::map<std::string,IAlgorithmPtr> m_algorithms;
 	};

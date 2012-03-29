@@ -48,6 +48,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 4.1.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -88,14 +89,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Projects\Engine\Dependencies\DirectX SDK\Include;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\CUDA_Tools\v4.1\include;C:\Projects\Engine\Dependencies\DirectX SDK\Include;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(IntDir)\$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Projects\Engine\Dependencies\DirectX SDK\Lib\x86;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\CUDA_Tools\v4.1\lib\Win32;C:\Projects\Engine\Dependencies\DirectX SDK\Lib\x86;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;cudart.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>..\..\SourceResources\PrepareResources.bat</Command>
@@ -115,14 +116,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Projects\Engine\Dependencies\DirectX SDK\Include;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\CUDA\v4.1\include;C:\Projects\Engine\Dependencies\DirectX SDK\Include;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(IntDir)\$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Projects\Engine\Dependencies\DirectX SDK\Lib\x64;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0\stage64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\CUDA_Tools\v4.1\lib\x64;C:\Projects\Engine\Dependencies\DirectX SDK\Lib\x64;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0\stage64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;cudart.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>..\..\SourceResources\PrepareResources.bat</Command>
@@ -171,7 +172,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Projects\Engine\Dependencies\DirectX SDK\Include;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\CUDA\v4.1\include;C:\Projects\Engine\Dependencies\DirectX SDK\Include;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(IntDir)\$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
@@ -179,8 +180,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Projects\Engine\Dependencies\DirectX SDK\Lib\x64;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0\stage64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;cudart.lib;opencl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\CUDA_Tools\v4.1\lib\x64;C:\Projects\Engine\Dependencies\DirectX SDK\Lib\x64;E:\Projekts\DSV\Current\Exjobb\Program\Dependancies\boost_1_48_0\stage64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>..\..\SourceResources\PrepareResources.bat</Command>
@@ -193,12 +194,14 @@
   <ItemGroup>
     <None Include="..\..\SourceResources\Includes\Kernel.hlsl" />
     <None Include="..\..\SourceResources\Includes\SMO_Buffers.hlsl" />
-    <None Include="..\..\SourceResources\Shaders\SMO_FindBI.hlsl" />
-    <None Include="..\..\SourceResources\Shaders\SMO_KernelEvaluations.hlsl" />
+    <None Include="..\..\SourceResources\OpenCL\SMO_Include.cl" />
+    <None Include="..\..\SourceResources\OpenCL\SMO_SelfProd.cl" />
+    <None Include="..\..\SourceResources\OpenCL\SMO_SVMOutput.cl" />
+    <None Include="..\..\SourceResources\OpenCL\SMO_Test.cl" />
+    <None Include="..\..\SourceResources\OpenCL\SMO_UpdateErrorCache.cl" />
     <None Include="..\..\SourceResources\Shaders\SMO_SVMOutput.hlsl" />
     <None Include="..\..\SourceResources\Shaders\SMO_Test.hlsl" />
     <None Include="..\..\SourceResources\Shaders\SMO_SelfProd.hlsl" />
-    <None Include="..\..\SourceResources\Shaders\SMO_UpdateError.hlsl" />
     <None Include="..\..\SourceResources\Shaders\SMO_UpdateErrorCache.hlsl" />
     <None Include="GPU_SupportVectorMachine_Unmanaged.ico" />
     <None Include="small.ico" />
@@ -214,6 +217,7 @@
     <ClInclude Include="FrameworkMessage.h" />
     <ClInclude Include="GPU_SupportVectorMachine_Unmanaged.h" />
     <ClInclude Include="GraphicsManager.h" />
+    <ClInclude Include="GridSearch.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUIWindow.h" />
     <ClInclude Include="IAlgorithm.h" />
@@ -229,11 +233,13 @@
     <ClInclude Include="ParserRaw.h" />
     <ClInclude Include="ParserRDS.h" />
     <ClInclude Include="PercentageSplit.h" />
+    <ClInclude Include="PerformanceSearch.h" />
     <ClInclude Include="PuKKernel.h" />
     <ClInclude Include="RBFKernel.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="AlgorithmDataPack.h" />
+    <ClInclude Include="SearchScheme.h" />
     <ClInclude Include="SMOSet.h" />
     <ClInclude Include="StartAlgorithmMessage.h" />
     <ClInclude Include="StartAlgorithmMessageHandler.h" />
@@ -245,6 +251,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConfigManager.cpp" />
+    <CudaCompile Include="Constants.cu">
+      <FileType>CppCode</FileType>
+      <TargetMachinePlatform Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">64</TargetMachinePlatform>
+      <TargetMachinePlatform Condition="'$(Configuration)|$(Platform)'=='Release|x64'">64</TargetMachinePlatform>
+      <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">compute_20,sm_20</CodeGeneration>
+      <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">compute_20,sm_20</CodeGeneration>
+    </CudaCompile>
     <ClCompile Include="CPUSVM.cpp" />
     <ClCompile Include="CrossValidation.cpp" />
     <ClCompile Include="CUDASVM.cpp" />
@@ -252,21 +265,39 @@
     <ClCompile Include="DirectXManager.cpp" />
     <ClCompile Include="DX11SVM.cpp" />
     <ClCompile Include="GPU_SupportVectorMachine_Unmanaged.cpp" />
+    <ClCompile Include="GridSearch.cpp" />
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="GUIWindow.cpp" />
+    <ClCompile Include="IEvaluation.cpp" />
     <ClCompile Include="IKernel.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="IParser.cpp" />
     <ClCompile Include="ISVM.cpp" />
+    <CudaCompile Include="Kernels.cu">
+      <FileType>Document</FileType>
+      <TargetMachinePlatform Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">64</TargetMachinePlatform>
+      <TargetMachinePlatform Condition="'$(Configuration)|$(Platform)'=='Release|x64'">64</TargetMachinePlatform>
+      <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">compute_20,sm_20</CodeGeneration>
+      <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">compute_20,sm_20</CodeGeneration>
+    </CudaCompile>
+    <CudaCompile Include="MainCUDA.cu">
+      <FileType>CppCode</FileType>
+      <TargetMachinePlatform Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">64</TargetMachinePlatform>
+      <TargetMachinePlatform Condition="'$(Configuration)|$(Platform)'=='Release|x64'">64</TargetMachinePlatform>
+      <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">compute_20,sm_20</CodeGeneration>
+      <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">compute_20,sm_20</CodeGeneration>
+    </CudaCompile>
     <ClCompile Include="MainFramework.cpp" />
     <ClCompile Include="OpenCLSVM.cpp" />
     <ClCompile Include="ParserARFF.cpp" />
     <ClCompile Include="ParserRaw.cpp" />
     <ClCompile Include="ParserRDS.cpp" />
     <ClCompile Include="PercentageSplit.cpp" />
+    <ClCompile Include="PerformanceSearch.cpp" />
     <ClCompile Include="PuKKernel.cpp" />
     <ClCompile Include="RBFKernel.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="SearchScheme.cpp" />
     <ClCompile Include="StartAlgorithmMessageHandler.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -280,5 +311,6 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 4.1.targets" />
   </ImportGroup>
 </Project>

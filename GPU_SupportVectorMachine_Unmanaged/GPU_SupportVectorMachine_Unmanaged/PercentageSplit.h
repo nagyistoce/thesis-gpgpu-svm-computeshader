@@ -8,6 +8,7 @@ namespace SVM_Framework{
 
 		bool advance();
 		void init();
+		bool isFinalStage();
 	private:
 		bool m_advance;
 		float m_splitPercentage;

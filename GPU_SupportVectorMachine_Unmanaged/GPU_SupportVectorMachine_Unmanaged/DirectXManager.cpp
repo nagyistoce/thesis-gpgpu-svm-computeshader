@@ -31,66 +31,69 @@ namespace SVM_Framework{
 			return;
 		}
 
+		bool multiCard = false;
 		unsigned int	adapterId = 0,
 						adapterOutputId = 0;
 		while(factory->EnumAdapters(adapterId, &adapter) == S_OK){
+			// Create devices
+			m_adapters.push_back(dxAdapter());
 			adapterOutputId = 0;
 			while(adapter->EnumOutputs(adapterOutputId,&adapterOutput) == S_OK){
 				if(adapterOutput->GetDesc(&outputDesc) == S_OK){
-					std::wstring name = outputDesc.DeviceName;
+					m_adapters.back().m_name = outputDesc.DeviceName;
 				}
 				adapterOutput->Release();
 				adapterOutputId++;
 			}
 
+			if(FAILED( result =	D3D11CreateDevice(adapter,
+										D3D_DRIVER_TYPE_UNKNOWN,
+										NULL,
+										deviceFlags,
+										NULL,
+										0,
+										D3D11_SDK_VERSION,
+										&m_adapters.back().m_deviceHandle,
+										&m_adapters.back().m_featureLevel,
+										&m_adapters.back().m_context))){
+				// Error handling
+				assert(0);
+				return;
+			}
+
 			adapter->Release();
 			adapterId++;
+			if(!multiCard)
+				break;
 		}
 		factory->Release();
-
-		// Create devices
-		m_adapters.push_back(dxAdapter());
-		if(FAILED(D3D11CreateDevice(NULL,
-									D3D_DRIVER_TYPE_HARDWARE,
-									NULL,
-									deviceFlags,
-									NULL,
-									0,
-									D3D11_SDK_VERSION,
-									&m_adapters.back().m_deviceHandle,
-									&m_adapters.back().m_featureLevel,
-									&m_adapters.back().m_context))){
-			// Error handling
-			assert(0);
-			return;
-		}
 
 		//D3D11_FEATURE_DATA_DOUBLES doubleSupport;
 		//m_adapters.back().m_deviceHandle->CheckFeatureSupport(D3D11_FEATURE_DOUBLES,&doubleSupport,sizeof(doubleSupport));
 	}
 
-	void DirectXManager::launchComputation(int x, int y, int z){
-		m_adapters.back().m_context->Dispatch(x,y,z);
+	void DirectXManager::launchComputation(int devId, int x, int y, int z){
+		m_adapters[devId].m_context->Dispatch(x,y,z);
 	}
 
-	void DirectXManager::setComputeShader(ID3D11ComputeShader* shader){
-		m_adapters.back().m_context->CSSetShader(shader,NULL,0);
+	void DirectXManager::setComputeShader(int devId, ID3D11ComputeShader* shader){
+		m_adapters[devId].m_context->CSSetShader(shader,NULL,0);
 	}
 	
-	void DirectXManager::setComputeShaderConstantBuffers(std::vector<ID3D11Buffer*> &buffers){
-		m_adapters.back().m_context->CSSetConstantBuffers(0,buffers.size(),&buffers[0]);
+	void DirectXManager::setComputeShaderConstantBuffers(int devId, std::vector<ID3D11Buffer*> &buffers){
+		m_adapters[devId].m_context->CSSetConstantBuffers(0,buffers.size(),&buffers[0]);
 	}
 
-	void DirectXManager::setComputeShaderResourceViews(std::vector<ID3D11ShaderResourceView*> &views){
-		m_adapters.back().m_context->CSSetShaderResources(0,views.size(),&views[0]);
+	void DirectXManager::setComputeShaderResourceViews(int devId, std::vector<ID3D11ShaderResourceView*> &views){
+		m_adapters[devId].m_context->CSSetShaderResources(0,views.size(),&views[0]);
 	}
 	
-	void DirectXManager::setComputeShaderUnorderedAccessViews(std::vector<ID3D11UnorderedAccessView*> &views){
+	void DirectXManager::setComputeShaderUnorderedAccessViews(int devId, std::vector<ID3D11UnorderedAccessView*> &views){
 		unsigned int viewInt = -1;
-		m_adapters.back().m_context->CSSetUnorderedAccessViews(0,views.size(),&views[0],&viewInt);
+		m_adapters[devId].m_context->CSSetUnorderedAccessViews(0,views.size(),&views[0],&viewInt);
 	}
 
-	void DirectXManager::setComputeShaderConstantBuffers(std::map<int,ID3D11Buffer*> &buffers){
+	void DirectXManager::setComputeShaderConstantBuffers(int devId, std::map<int,ID3D11Buffer*> &buffers){
 		std::vector<ID3D11Buffer*> setVec;
 		std::map<int,ID3D11Buffer*>::iterator itr = buffers.begin();
 
@@ -99,10 +102,10 @@ namespace SVM_Framework{
 			itr++;
 		}
 
-		setComputeShaderConstantBuffers(setVec);
+		setComputeShaderConstantBuffers(devId,setVec);
 	}
 	
-	void DirectXManager::setComputeShaderResourceViews(std::map<int,ID3D11ShaderResourceView*> &views){
+	void DirectXManager::setComputeShaderResourceViews(int devId, std::map<int,ID3D11ShaderResourceView*> &views){
 		std::vector<ID3D11ShaderResourceView*> setVec;
 		std::map<int,ID3D11ShaderResourceView*>::iterator itr = views.begin();
 
@@ -111,10 +114,10 @@ namespace SVM_Framework{
 			itr++;
 		}
 
-		setComputeShaderResourceViews(setVec);
+		setComputeShaderResourceViews(devId,setVec);
 	}
 
-	void DirectXManager::setComputeShaderUnorderedAccessViews(std::map<int,ID3D11UnorderedAccessView*> &views){
+	void DirectXManager::setComputeShaderUnorderedAccessViews(int devId, std::map<int,ID3D11UnorderedAccessView*> &views){
 		std::vector<ID3D11UnorderedAccessView*> setVec;
 		std::map<int,ID3D11UnorderedAccessView*>::iterator itr = views.begin();
 
@@ -123,10 +126,10 @@ namespace SVM_Framework{
 			itr++;
 		}
 
-		setComputeShaderUnorderedAccessViews(setVec);
+		setComputeShaderUnorderedAccessViews(devId,setVec);
 	}
 
-	HRESULT DirectXManager::createComputeShader(std::string filename, ID3D11ComputeShader** ppShader){
+	HRESULT DirectXManager::createComputeShader(int devId, std::string filename, ID3D11ComputeShader** ppShader){
 		boost::filesystem::path path = ResourceManager::findFilePath(filename);
 		std::ifstream input(path.generic_string(),std::ios_base::binary);
 		unsigned int size = boost::filesystem::file_size(path);
@@ -134,7 +137,7 @@ namespace SVM_Framework{
 		char* buffer = new char[size];
 		input.read(buffer,size);
 
-		HRESULT hr = m_adapters.back().m_deviceHandle->CreateComputeShader(buffer,size,NULL,ppShader);
+		HRESULT hr = m_adapters[devId].m_deviceHandle->CreateComputeShader(buffer,size,NULL,ppShader);
 		delete[] buffer;
 		input.close();
 

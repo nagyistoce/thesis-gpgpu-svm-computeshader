@@ -17,7 +17,7 @@ namespace SVM_Framework{
 		return int(m_classValue->getValue());
 	}
 		
-	double Instance::weight(){
+	Value::v_precision Instance::weight(){
 		return m_weight;
 	}
 		
@@ -25,7 +25,7 @@ namespace SVM_Framework{
 		return m_valueVector.size();
 	}
 		
-	double Instance::getValue(unsigned int ind){
+	Value::v_precision Instance::getValue(unsigned int ind){
 		return m_valueVector[ind] ? m_valueVector[ind]->getValue() : 0;
 	}
 	

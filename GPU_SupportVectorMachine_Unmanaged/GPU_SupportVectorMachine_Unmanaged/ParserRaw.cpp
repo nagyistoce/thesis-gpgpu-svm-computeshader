@@ -37,7 +37,7 @@ namespace SVM_Framework{
 
 		// Parse data
 		std::string dataString;
-		float numberTest;
+		Value::v_precision numberTest;
 		while(bufferPos < m_size){
 			dataString.clear();
 			while(m_buffer[bufferPos] != '\n' && m_buffer[bufferPos] != '	' && bufferPos < m_size){
@@ -50,7 +50,7 @@ namespace SVM_Framework{
 				sStream >> numberTest;
 				if(sStream.fail()){
 					// non-numeric value
-					doc->addValue(0.0f,true);
+					doc->addValue(0.0,true);
 				}
 				else{
 					// numeric value
@@ -67,7 +67,7 @@ namespace SVM_Framework{
 
 		//// Parse data
 		//std::string dataString;
-		//float numberTest;
+		//Value::v_precision numberTest;
 		//unsigned int bufferPostPos;
 		//doc->m_data.reserve((m_size - bufferPos)/5);
 		//while(bufferPos < m_size){
@@ -80,7 +80,7 @@ namespace SVM_Framework{
 
 		//	//dataString.assign(&m_buffer[bufferPostPos],bufferPos-bufferPostPos);
 		//	try{
-		//		numberTest = boost::lexical_cast<float,std::string>(dataString);
+		//		numberTest = boost::lexical_cast<Value::v_precision,std::string>(dataString);
 		//		doc->addValue(numberTest);
 		//	}
 		//	catch(boost::bad_lexical_cast &){

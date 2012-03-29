@@ -8,7 +8,9 @@ namespace SVM_Framework{
 
 		bool advance();
 		void init();
+		bool isFinalStage();
 	private:
+		std::vector<InstancePtr> m_validationSet;
 	};
 }
 

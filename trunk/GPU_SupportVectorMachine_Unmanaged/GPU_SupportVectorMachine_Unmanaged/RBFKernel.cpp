@@ -2,7 +2,7 @@
 #include "RBFKernel.h"
 
 namespace SVM_Framework{
-	RBFKernel::RBFKernel(){
+	RBFKernel::RBFKernel(bool cache, bool fullCache):IKernel(cache,fullCache){
 		m_gamma = 0.1;
 		m_id = 1;
 	}

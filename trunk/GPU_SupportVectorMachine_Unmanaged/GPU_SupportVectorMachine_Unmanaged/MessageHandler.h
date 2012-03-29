@@ -5,6 +5,7 @@ namespace SVM_Framework{
 	class MessageHandler{
 	public:
 		virtual void handle(IDataPackPtr dataPack) = 0;
+		virtual void stop() = 0;
 	private:
 	};
 }

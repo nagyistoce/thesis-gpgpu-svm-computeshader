@@ -15,6 +15,12 @@ namespace SVM_Framework{
 		return false;
 	}
 
+	bool PercentageSplit::isFinalStage(){
+		if(m_stage == 1)
+			return true;
+		return false;
+	}
+
 	void PercentageSplit::init(){
 		for(unsigned int i=0; i<m_data->getNumInstances(); i++){
 			if(m_data->getInstance(i)->classValue() == m_data->m_cl1Value)
@@ -37,5 +43,7 @@ namespace SVM_Framework{
 			else
 				m_testingInds.push_back(m_cl2Instances[i]->getIndex());
 		}
+
+		calculateCost(numTrainClass1,numTrainClass2);
 	}
 }

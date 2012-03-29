@@ -13,15 +13,21 @@ namespace SVM_Framework{
 
 		virtual bool advance() = 0;
 		virtual void init() = 0;
+		virtual bool isFinalStage() = 0;
 
 		void setStage(unsigned int stage) { m_stage = stage; }
 		unsigned int getStage() { return m_stage; }
 		unsigned int getNumStages() { return m_numStages; }
 
-		void setData(DataDocumentPtr data, IDataPackPtr dataPack){	m_dataPack = dataPack; m_data = data; init(); }
+		void setData(DataDocumentPtr data, IDataPackPtr dataPack);
 		std::vector<unsigned int>& getTrainingInds() { return m_trainingInds; }
 		std::vector<unsigned int>& getTestingInds() { return m_testingInds; }
+
+		double getCl1C() {return m_C_cl1;}
+		double getCl2C() {return m_C_cl2;}
 	protected:
+		void calculateCost(int cl1,int cl2);
+
 		IDataPackPtr m_dataPack;
 		DataDocumentPtr m_data;
 
@@ -33,6 +39,9 @@ namespace SVM_Framework{
 
 		unsigned int m_stage;
 		unsigned int m_numStages;
+
+		double	m_C_cl1,
+				m_C_cl2;
 	};
 }
 

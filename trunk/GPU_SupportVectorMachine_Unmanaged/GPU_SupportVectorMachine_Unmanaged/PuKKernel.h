@@ -4,7 +4,7 @@
 namespace SVM_Framework{
 	class PuKKernel : public IKernel{
 	public:
-		PuKKernel();
+		PuKKernel(bool cache, bool fullCache);
 
 		double evaluate(int i1, int i2, InstancePtr inst);
 		void setParameters(double p1, double p2 = 1.0, double p3 = 1.0);

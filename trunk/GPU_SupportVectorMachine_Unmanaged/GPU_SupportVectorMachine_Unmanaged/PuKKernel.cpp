@@ -2,7 +2,7 @@
 #include "PuKKernel.h"
 
 namespace SVM_Framework{
-	PuKKernel::PuKKernel(){
+	PuKKernel::PuKKernel(bool cache, bool fullCache):IKernel(cache,fullCache){
 		m_omega = 1.0;
 		m_sigma = 1.0;
 		m_id = 0;

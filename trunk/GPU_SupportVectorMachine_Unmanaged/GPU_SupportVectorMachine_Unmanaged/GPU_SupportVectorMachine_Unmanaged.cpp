@@ -4,6 +4,13 @@
 #include "stdafx.h"
 #include "GPU_SupportVectorMachine_Unmanaged.h"
 #include "GUIManager.h"
+#include "DirectXManager.h"
+#include "StartAlgorithmMessage.h"
+#include "StopAlgorithmMessage.h"
+#include "AlgorithmDataPack.h"
+#include "MainFramework.h"
+#include "GridSearch.h"
+#include "PerformanceSearch.h"
 
 #define MAX_LOADSTRING 100
 
@@ -11,7 +18,10 @@
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
-GUIManagerPtr guiManager;
+MainFrameworkPtr mainFramework;
+boost::shared_ptr<boost::thread> loadThread;
+boost::shared_ptr<SVM_Framework::GridSearch> gridSearch;
+boost::shared_ptr<SVM_Framework::PerformanceSearch> perfSearch;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -46,8 +56,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	HWND hwnd = FindWindow(szWindowClass,szTitle);
 	// Create and initialize app framework
-	guiManager = GUIManagerPtr(new SVM_Framework::GUIManager(hwnd,hInstance));
-	
+	mainFramework = MainFrameworkPtr(new SVM_Framework::MainFramework(DirectXManagerPtr(new SVM_Framework::DirectXManager()),GUIManagerPtr(new SVM_Framework::GUIManager(hwnd,hInstance))));
+	mainFramework->run();
+
 	// Main message loop:
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
@@ -58,7 +69,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 	}
 
-	guiManager.reset();
+	mainFramework.reset();
 	return (int) msg.wParam;
 }
 
@@ -108,8 +119,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        In this function, we save the instance handle in a global variable and
 //        create and display the main program window.
 //
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
-{
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow){
 	HWND hWnd;
 	hInst = hInstance; // Store instance handle in our global variable
 
@@ -126,6 +136,19 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	return TRUE;
 }
 
+void loadFile(){
+	GUIManagerPtr guiPtr = mainFramework->getGuiPtr();
+	std::stringstream ss;
+	ss << guiPtr->getEditText(IDC_EDIT_FILEPATH);
+	DataDocumentPtr doc = mainFramework->getResourcePtr()->getDocumentResource(ss.str());
+
+	std::wstringstream wss;
+	wss << ss.str().c_str() << "\r\nAttributes: " << doc->getNumAttributes() << "\r\nInstances: " << doc->getNumInstances() << "\r\n\r\n";
+	guiPtr->postDebugMessage(wss.str());
+
+	guiPtr->enableAllButStop();
+}
+
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -136,8 +159,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY	- post a quit message and return
 //
 //
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;
@@ -153,17 +175,49 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (wmId)
 		{
 		case IDM_ABOUT:
-			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+			//DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 			break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
 			break;
-		case IDC_BUTTON_RUN:
-			guiManager->launchAlgo();
+		case IDC_BUTTON_GRIDSEARCH:{
+			gridSearch = boost::shared_ptr<SVM_Framework::GridSearch>(new SVM_Framework::GridSearch(mainFramework));
+			gridSearch->run();
 			break;
-		case IDC_BUTTON_STOP:
-			guiManager->stopAlgo();
+		}
+		case IDC_BUTTON_PERFSEARCH:{
+			perfSearch = boost::shared_ptr<SVM_Framework::PerformanceSearch>(new SVM_Framework::PerformanceSearch(mainFramework,5));
+			perfSearch->run();
 			break;
+		}
+		case IDC_BUTTON_RUN:{
+			GUIManagerPtr guiPtr = mainFramework->getGuiPtr();
+			guiPtr->disableAllButStop();
+
+			AlgorithmDataPackPtr data = AlgorithmDataPackPtr(new SVM_Framework::AlgorithmDataPack);
+			data->m_algoName = guiPtr->getEditText(IDC_COMBO_ALGO);
+			std::stringstream ss;
+			ss << guiPtr->getEditText(IDC_EDIT_FILEPATH);
+			data->m_dataResource = ss.str();
+
+			mainFramework->postMessage(StartAlgorithmMessagePtr(new SVM_Framework::StartAlgorithmMessage(data)));
+			break;
+		}
+		case IDC_BUTTON_STOP:{
+			AlgorithmDataPackPtr data = AlgorithmDataPackPtr(new SVM_Framework::AlgorithmDataPack);
+			mainFramework->postMessage(StopAlgorithmMessagePtr(new SVM_Framework::StopAlgorithmMessage(data)));
+			break;
+		}
+		case IDC_BUTTON_LOAD:{
+			GUIManagerPtr guiPtr = mainFramework->getGuiPtr();
+			guiPtr->disableAllButStop();
+
+			if(loadThread)
+				loadThread->join();
+
+			loadThread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&loadFile)));
+			break;
+		}
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
@@ -199,7 +253,6 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 		{
-			guiManager->launchAlgo();
 			return (INT_PTR)TRUE;
 		}
 		break;

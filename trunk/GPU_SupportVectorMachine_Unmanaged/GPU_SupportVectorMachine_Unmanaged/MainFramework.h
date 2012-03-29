@@ -4,15 +4,20 @@
 #include "FrameworkMessage.h"
 #include "MessageHandler.h"
 #include "IAlgorithm.h"
+#include "GUIManager.h"
 
 namespace SVM_Framework{
 	class MainFramework{
 	public:
-		MainFramework(GraphicsManagerPtr gmgr);
+		MainFramework(GraphicsManagerPtr gmgr, GUIManagerPtr guimgr);
 		~MainFramework();
 
 		void run();
 		void postMessage(FrameworkMessagePtr message);
+
+		GUIManagerPtr getGuiPtr() {return m_guiManager;}
+		ResourceManagerPtr getResourcePtr() {return m_rManager;}
+		GraphicsManagerPtr getGraphicsPtr() {return m_gManager;}
 	private:
 		void initHandlers();
 		void parseMessages();
@@ -24,6 +29,7 @@ namespace SVM_Framework{
 		
 		GraphicsManagerPtr m_gManager;
 		ResourceManagerPtr m_rManager;
+		GUIManagerPtr m_guiManager;
 
 		std::map<std::string,MessageHandlerPtr> m_messageHandlers;
 

@@ -3,13 +3,15 @@
 namespace SVM_Framework{
 	class Value{
 	public:
-		Value(float value){
+		typedef float v_precision;
+
+		Value(v_precision value){
 			m_value = value;
 		}
 
-		float getValue() {return m_value;}
+		v_precision getValue() {return m_value;}
 	private:
-		float m_value;
+		v_precision m_value;
 	};
 }
 

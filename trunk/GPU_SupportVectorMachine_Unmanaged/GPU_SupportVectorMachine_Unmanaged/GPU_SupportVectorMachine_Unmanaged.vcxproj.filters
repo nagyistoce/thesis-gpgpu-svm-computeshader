@@ -75,6 +75,18 @@
     <Filter Include="Resource Files\Shaders\Includes">
       <UniqueIdentifier>{fa10054b-6321-4dab-a352-f57527ceea8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\CUDA code">
+      <UniqueIdentifier>{5b1fff83-5c1f-46d1-a594-b60a987d888f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\CUDA code\nvcc">
+      <UniqueIdentifier>{c9a8c484-1b0d-4dae-8c4e-239fa46040f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\OpenCL code">
+      <UniqueIdentifier>{ecd87d88-9894-4a60-83d7-eb15cdd767be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Init\MiningUtilities">
+      <UniqueIdentifier>{cd6f107b-9e2a-4f73-ac00-615bcf95f215}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="small.ico">
@@ -92,15 +104,6 @@
     <None Include="..\..\SourceResources\Shaders\SMO_SVMOutput.hlsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="..\..\SourceResources\Shaders\SMO_UpdateError.hlsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="..\..\SourceResources\Shaders\SMO_FindBI.hlsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="..\..\SourceResources\Shaders\SMO_KernelEvaluations.hlsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
     <None Include="..\..\SourceResources\Shaders\SMO_UpdateErrorCache.hlsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
@@ -109,6 +112,21 @@
     </None>
     <None Include="..\..\SourceResources\Shaders\SMO_SelfProd.hlsl">
       <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\SourceResources\OpenCL\SMO_SelfProd.cl">
+      <Filter>Resource Files\OpenCL code</Filter>
+    </None>
+    <None Include="..\..\SourceResources\OpenCL\SMO_SVMOutput.cl">
+      <Filter>Resource Files\OpenCL code</Filter>
+    </None>
+    <None Include="..\..\SourceResources\OpenCL\SMO_Test.cl">
+      <Filter>Resource Files\OpenCL code</Filter>
+    </None>
+    <None Include="..\..\SourceResources\OpenCL\SMO_UpdateErrorCache.cl">
+      <Filter>Resource Files\OpenCL code</Filter>
+    </None>
+    <None Include="..\..\SourceResources\OpenCL\SMO_Include.cl">
+      <Filter>Resource Files\OpenCL code</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +244,15 @@
     <ClInclude Include="StopAlgorithmMessage.h">
       <Filter>Source Files\Core\MessageManager\Messages</Filter>
     </ClInclude>
+    <ClInclude Include="GridSearch.h">
+      <Filter>Source Files\Core\Init\MiningUtilities</Filter>
+    </ClInclude>
+    <ClInclude Include="PerformanceSearch.h">
+      <Filter>Source Files\Core\Init\MiningUtilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchScheme.h">
+      <Filter>Source Files\Core\Init\MiningUtilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -303,10 +330,33 @@
     <ClCompile Include="PercentageSplit.cpp">
       <Filter>Source Files\Algorithms\Evaluation</Filter>
     </ClCompile>
+    <ClCompile Include="IEvaluation.cpp">
+      <Filter>Source Files\Algorithms\Evaluation</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSearch.cpp">
+      <Filter>Source Files\Core\Init\MiningUtilities</Filter>
+    </ClCompile>
+    <ClCompile Include="PerformanceSearch.cpp">
+      <Filter>Source Files\Core\Init\MiningUtilities</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchScheme.cpp">
+      <Filter>Source Files\Core\Init\MiningUtilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GPU_SupportVectorMachine_Unmanaged.rc">
       <Filter>Resource Files\Application</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="Constants.cu">
+      <Filter>Resource Files\CUDA code\nvcc</Filter>
+    </CudaCompile>
+    <CudaCompile Include="MainCUDA.cu">
+      <Filter>Resource Files\CUDA code</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Kernels.cu">
+      <Filter>Resource Files\CUDA code\nvcc</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

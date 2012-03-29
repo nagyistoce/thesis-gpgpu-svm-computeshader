@@ -2,6 +2,7 @@
 <Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<InputDir>.\Shaders\</InputDir>
+		<InputDir2>.\OpenCL\</InputDir2>
 		<OutputDir>..\Build_Output\Resources\Shaders\</OutputDir>
 		<OutputDir2>..\GPU_SupportVectorMachine_Unmanaged\Resources\Shaders\</OutputDir2>
 		<BuildType>Dev</BuildType>
@@ -12,9 +13,15 @@
 	</ItemGroup>
 
 	<Target Name="Build">
+		<CreateItem Include="$(InputDir2)**\*.*">
+                <Output TaskParameter="Include" ItemName="YourFilesToCopy" />
+        </CreateItem>
+	
 		<!-- Compile computeshaders -->
 		<MakeDir Directories="$(OutputDir)"/>
 		<MakeDir Directories="$(OutputDir2)"/>
+		<Copy SourceFiles="@(YourFilesToCopy)" DestinationFiles="@(YourFilesToCopy->'$(OutputDir)%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(YourFilesToCopy)" DestinationFiles="@(YourFilesToCopy->'$(OutputDir2)%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Exec Condition="%(ShaderFiles.Filename) != ''" Command="fxc.exe /T cs_5_0 /E cs_entry /Fo $(OutputDir)%(ShaderFiles.Filename).hlsl %(ShaderFiles.RelativeDir)%(ShaderFiles.Filename).hlsl"/>
 		<Exec Condition="%(ShaderFiles.Filename) != ''" Command="fxc.exe /T cs_5_0 /E cs_entry /Fo $(OutputDir2)%(ShaderFiles.Filename).hlsl %(ShaderFiles.RelativeDir)%(ShaderFiles.Filename).hlsl"/>
 	</Target>

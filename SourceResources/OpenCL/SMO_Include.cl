@@ -1,5 +1,5 @@
-//#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-typedef float svm_precision;
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+typedef double svm_precision;
 #define thread_group_size 64
 
 typedef struct{

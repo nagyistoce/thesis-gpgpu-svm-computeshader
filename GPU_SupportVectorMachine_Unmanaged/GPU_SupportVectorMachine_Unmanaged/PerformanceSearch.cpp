@@ -57,6 +57,7 @@ namespace SVM_Framework{
 				compile.m_acc += m_resPacks[i].accuracy;
 				compile.m_cl1Enrich += m_resPacks[i].cl1EnrichmentFactor;
 				compile.m_cl2Enrich += m_resPacks[i].cl2EnrichmentFactor;
+				compile.m_supportVectors += m_resPacks[i].supportVectors;
 
 				if(i < m_resPacks.size()-1)
 					plus = L"+";
@@ -79,6 +80,7 @@ namespace SVM_Framework{
 			compile.m_acc /= double(m_measureCount);
 			compile.m_cl1Enrich /= double(m_measureCount);
 			compile.m_cl2Enrich /= double(m_measureCount);
+			compile.m_supportVectors /= m_measureCount;
 			m_finalCompilation.push_back(compile);
 
 			m_output << "Step: " << m_step-m_stepSize << 
@@ -105,7 +107,7 @@ namespace SVM_Framework{
 				m_output << "\n\n";
 				for(unsigned int i=0; i<m_finalCompilation.size(); i++){
 					m_output << "\n" << m_finalCompilation[i].m_acc*100 << "%	" << m_finalCompilation[i].m_cl1Enrich << "	" << 
-						m_finalCompilation[i].m_cl2Enrich;
+						m_finalCompilation[i].m_cl2Enrich << "	" << m_finalCompilation[i].m_supportVectors;
 				}
 			}
 

@@ -143,7 +143,8 @@ void loadFile(){
 	DataDocumentPtr doc = mainFramework->getResourcePtr()->getDocumentResource(ss.str());
 
 	std::wstringstream wss;
-	wss << ss.str().c_str() << "\r\nAttributes: " << doc->getNumAttributes() << "\r\nInstances: " << doc->getNumInstances() << "\r\n\r\n";
+	wss << ss.str().c_str() << "\r\nAttributes: " << doc->getNumAttributes() << "\r\nInstances: " << doc->getNumInstances() << "\r\n" 
+		<< "CL1 - " << doc->m_cl1Value << ":" << doc->m_numCl1 << "\r\n" << "CL2 - " << doc->m_cl2Value << ":" << doc->m_numCl2 << "\r\n";
 	guiPtr->postDebugMessage(wss.str());
 
 	guiPtr->enableAllButStop();

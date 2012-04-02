@@ -100,10 +100,10 @@ namespace SVM_Framework{
 			}
 			if(EF < m_resPacks[i].cl1EnrichmentFactor || EF < m_resPacks[i].cl2EnrichmentFactor){
 				if(m_resPacks[i].cl1EnrichmentFactor > m_resPacks[i].cl2EnrichmentFactor)
-					bestEF = m_resPacks[i].cl1EnrichmentFactor;
+					EF = m_resPacks[i].cl1EnrichmentFactor;
 				else
-					bestEF = m_resPacks[i].cl2EnrichmentFactor;
-				EF = i;
+					EF = m_resPacks[i].cl2EnrichmentFactor;
+				bestEF = i;
 			}
 		}
 

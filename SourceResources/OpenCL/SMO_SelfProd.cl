@@ -1,5 +1,5 @@
 #include "SMO_Include.cl"
-//#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
 
 __attribute__((reqd_work_group_size(thread_group_size, 1, 1)))
 __kernel void SelfProd(__global svm_precision *b_inputBuffer, __global svm_precision *b_selfProd, __constant SharedBuffer* constants){

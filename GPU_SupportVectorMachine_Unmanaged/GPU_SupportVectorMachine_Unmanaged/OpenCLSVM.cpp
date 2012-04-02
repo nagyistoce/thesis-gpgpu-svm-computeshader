@@ -143,7 +143,7 @@ namespace SVM_Framework{
 
 		// Divide between devices
 		int distrib = 0;
-		double cachedRes = 0;
+		Value::v_precision cachedRes = 0;
 		for(unsigned int i=0; i<m_numDevices; i++){
 			m_inds[i].clear();
 		}
@@ -211,7 +211,7 @@ namespace SVM_Framework{
 		}
 		for(unsigned int i=0; i<m_inds.size(); i++){
 			if(!m_inds[i].empty()){
-				m_copyBuffer[i].assign(m_inds[i].size(),0);
+				m_copyBuffer[i].assign(m_inds[i].size()*2,0);
 				errorCode = clEnqueueReadBuffer(m_cQueue, m_buffers[OCLB_Output], CL_TRUE, 0, sizeof(svm_precision)*m_copyBuffer[i].size(), &m_copyBuffer[i][0], 0, 0, 0);
 				assert(errorCode == CL_SUCCESS);
 			}
@@ -251,7 +251,7 @@ namespace SVM_Framework{
 		svm_precision result = 0;
 
 		int distrib = 0;
-		double cachedRes = 0;
+		Value::v_precision cachedRes = 0;
 		for(unsigned int i=0; i<m_numDevices; i++){
 			m_inds[i].clear();
 		}
@@ -441,7 +441,7 @@ namespace SVM_Framework{
 		cl_int errorCode;
 		int trainingSetSize = m_params[id].m_evaluation->getNumTrainingInstances();
 
-		m_buffers[OCLB_Output] = clCreateBuffer(m_context, CL_MEM_WRITE_ONLY, sizeof(svm_precision)*trainingSetSize, NULL, &errorCode);
+		m_buffers[OCLB_Output] = clCreateBuffer(m_context, CL_MEM_WRITE_ONLY, sizeof(svm_precision)*(trainingSetSize*2), NULL, &errorCode);
 		assert(errorCode == CL_SUCCESS);
 		
 		m_buffers[OCLB_Alpha] = clCreateBuffer(m_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(svm_precision)*m_params[id].m_alpha.size(), &m_params[id].m_alpha[0], &errorCode);

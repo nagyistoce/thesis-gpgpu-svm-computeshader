@@ -16,7 +16,8 @@ namespace SVM_Framework{
 				m_cl1Enrich(0.0),
 				m_cl2Enrich(0.0),
 				m_trainingDev(0.0),
-				m_testingDev(0.0)
+				m_testingDev(0.0),
+				m_supportVectors(0)
 			{}
 
 			double	m_total,
@@ -29,6 +30,8 @@ namespace SVM_Framework{
 					
 					m_trainingDev,
 					m_testingDev;
+
+			unsigned int m_supportVectors;
 		};
 
 		bool callbackProcessing(IAlgorithmPtr algorithm);

@@ -100,9 +100,9 @@ namespace SVM_Framework{
 
 		// Normalize
 		double scale=2,translate=-1,value;
-		std::set<int> classValues;
+		std::map<int,unsigned int> classValues;
 		for(unsigned int i=0; i<m_instances.size(); i++){
-			classValues.insert(m_instances[i]->classValue());
+			classValues[m_instances[i]->classValue()]++;
 			if(m_normalize){
 				for(unsigned int j=0; j<getNumAttributes(); j++){
 					value = m_instances[i]->m_valueVector[j]->getValue();
@@ -112,9 +112,11 @@ namespace SVM_Framework{
 			}
 		}
 
-		std::set<int>::iterator clItr = classValues.begin();
-		m_cl1Value = *clItr;
+		std::map<int,unsigned int>::iterator clItr = classValues.begin();
+		m_cl1Value = clItr->first;
+		m_numCl1 = clItr->second;
 		clItr++;
-		m_cl2Value = *clItr;
+		m_cl2Value = clItr->first;
+		m_numCl2 = clItr->second;
 	}
 }

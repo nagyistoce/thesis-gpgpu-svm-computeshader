@@ -62,7 +62,7 @@ namespace SVM_Framework{
 	}
 
 	void DX11SVM::lagrangeThresholdUpdate(svm_precision p1, svm_precision p2, int id, int i1, int i2){
-		//std::vector<double> checkVal;
+		//std::vector<Value::v_precision> checkVal;
 		
 		for(unsigned int i=0; i<m_dxMgr->getNumDevices(); i++){
 			m_dxMgr->setComputeShader(i,m_shaders[i][GS_UpdateErrorCache]);
@@ -70,7 +70,7 @@ namespace SVM_Framework{
 
 		// Divide between devices
 		int distrib = 0;
-		double cachedRes = 0;
+		Value::v_precision cachedRes = 0;
 		for(unsigned int i=0; i<m_dxMgr->getNumDevices(); i++){
 			m_inds[i].clear();
 		}
@@ -134,7 +134,10 @@ namespace SVM_Framework{
 					m_params[id].m_errors[m_inds[i][j]] += ((p1 * m_copyBuffer[i][j*2]) + (p2 * m_copyBuffer[i][(j*2)+1]));
 
 					//m_params[id].m_errors[m_inds[i][(j/2)]] += checkVal[(j/2)];
-					//assert(abs(checkVal[j])-abs(m_params[id].m_errors[m_inds[i][j]]) < 1.0e-7);
+					/*assert(abs(checkVal[j])-abs(m_params[id].m_errors[m_inds[i][j]]) < 1.0e-7);
+					if(abs(checkVal[j])-abs(m_params[id].m_errors[m_inds[i][j]]) < 1.0e-7){
+						m_data->m_gui->postDebugMessage(L"SVMOutput failiure!!!!");
+					}*/
 				}
 			}
 			m_params[id].m_kernel->insertIntoCache(m_inds[i],m_copyBuffer[i],i1,i2);
@@ -160,13 +163,16 @@ namespace SVM_Framework{
 
 	ISVM::svm_precision DX11SVM::SVMOutput(int index, InstancePtr inst, int id){
 		svm_precision result = 0;
+		//svm_precision resultCheck = 0;
 
 		int distrib = 0;
-		double cachedRes = 0;
+		Value::v_precision cachedRes = 0;
 		for(unsigned int i=0; i<m_dxMgr->getNumDevices(); i++){
 			m_inds[i].clear();
 		}
 		for(int i = m_params[id].m_supportVectors->getNext(-1); i != -1; i = m_params[id].m_supportVectors->getNext(i)){
+			//resultCheck += m_params[id].m_class[i] * m_params[id].m_alpha[i] * m_params[id].m_kernel->eval(index, i, inst);
+
 			if(m_params[id].m_kernel->isCached(i,index,cachedRes)){
 				result += m_params[id].m_class[i] * m_params[id].m_alpha[i] * cachedRes;
 			}
@@ -214,18 +220,20 @@ namespace SVM_Framework{
 		}
 		result -= m_params[id].m_b;
 
-		//// Unit test code
-		//svm_precision resultCheck = 0;
-		//std::vector<svm_precision> resultsCheck;
-		//for (int i = 0; i<m_inds.size(); i++) {
-		//	for(unsigned int j=0; j<m_inds[i].size(); j++){
-		//		resultsCheck.push_back(m_params[id].m_class[m_inds[i][j]] * m_params[id].m_alpha[m_inds[i][j]] * m_params[id].m_kernel->eval(index, m_inds[i][j], inst));
-		//		resultCheck += resultsCheck.back();
-		//	}
-		//}
+		// Unit test code
+		/*std::vector<svm_precision> resultsCheck;
+		for (int i = 0; i<m_inds.size(); i++) {
+			for(unsigned int j=0; j<m_inds[i].size(); j++){
+				resultsCheck.push_back(m_params[id].m_class[m_inds[i][j]] * m_params[id].m_alpha[m_inds[i][j]] * m_params[id].m_kernel->eval(index, m_inds[i][j], inst));
+				resultCheck += resultsCheck.back();
+			}
+		}*/
 		//resultCheck -= m_params[id].m_b;
 
 		//assert(abs(result)-abs(resultCheck) < 1.0e-7);
+		//if((abs(result)-abs(resultCheck)) > 1.0e-7){
+		//	m_data->m_gui->postDebugMessage(L"SVMOutput failiure!!!!");
+		//}
 		
 		return result;
 	}

@@ -49,7 +49,7 @@ namespace SVM_Framework{
 	void CUDASVM::lagrangeThresholdUpdate(svm_precision p1, svm_precision p2, int id, int i1, int i2){
 		// Divide between devices
 		int distrib = 0;
-		double cachedRes = 0;
+		Value::v_precision cachedRes = 0;
 		for(unsigned int i=0; i<m_numDevices; i++){
 			m_inds[i].clear();
 		}
@@ -96,7 +96,7 @@ namespace SVM_Framework{
 		}
 		for(unsigned int i=0; i<m_inds.size(); i++){
 			if(!m_inds[i].empty()){
-				m_copyBuffer[i].assign(m_inds[i].size(),0);
+				m_copyBuffer[i].assign(m_inds[i].size()*2,0);
 				cudaDeviceSynchronize();
 				cudaMemcpy(&m_copyBuffer[i][0],b_output,sizeof(svm_precision)*m_copyBuffer[i].size(),cudaMemcpyDeviceToHost);
 			}
@@ -134,7 +134,7 @@ namespace SVM_Framework{
 		svm_precision result = 0;
 
 		int distrib = 0;
-		double cachedRes = 0;
+		Value::v_precision cachedRes = 0;
 		for(unsigned int i=0; i<m_numDevices; i++){
 			m_inds[i].clear();
 		}
@@ -272,7 +272,7 @@ namespace SVM_Framework{
 		const textureReference* texRefPtr;
 		int trainingSetSize = m_params[id].m_evaluation->getNumTrainingInstances();
 
-		cudaMalloc(&b_output,sizeof(svm_precision)*trainingSetSize);
+		cudaMalloc(&b_output,sizeof(svm_precision)*(trainingSetSize*2));
 
 		cudaMalloc(&b_class,sizeof(svm_precision)*trainingSetSize);
 		cudaMemcpy(b_class, &m_params[id].m_class[0], sizeof(svm_precision)*m_params[id].m_class.size(),cudaMemcpyHostToDevice);

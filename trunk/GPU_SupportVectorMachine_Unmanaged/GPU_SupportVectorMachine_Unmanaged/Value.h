@@ -3,7 +3,7 @@
 namespace SVM_Framework{
 	class Value{
 	public:
-		typedef float v_precision;
+		typedef double v_precision;
 
 		Value(v_precision value){
 			m_value = value;

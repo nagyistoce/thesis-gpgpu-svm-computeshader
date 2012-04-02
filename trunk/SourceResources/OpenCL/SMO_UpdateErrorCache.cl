@@ -1,5 +1,5 @@
 #include "SMO_Include.cl"
-//#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
 
 __attribute__((reqd_work_group_size(thread_group_size, 1, 1)))
 __kernel void UpdateErrorCache(	__global svm_precision *b_inputBuffer,__global unsigned int* b_kernelEvalBuffer, 
@@ -35,7 +35,7 @@ __kernel void UpdateErrorCache(	__global svm_precision *b_inputBuffer,__global u
 		i++;
 	}while (i < n);
 
-	b_errorBuffer[tid*2] = evaluateKernel(result1,sdata[threadID].ind1/n,sdata[threadID].ind3/n);
-	b_errorBuffer[(tid*2)+1] = evaluateKernel(result2,sdata[threadID].ind2/n,sdata[threadID].ind3/n);
+	b_errorBuffer[tid*2] = evaluateKernel(result1,sdata[threadID].ind1/n,sdata[threadID].ind3/n,b_selfProd,constants);
+	b_errorBuffer[(tid*2)+1] = evaluateKernel(result2,sdata[threadID].ind2/n,sdata[threadID].ind3/n,b_selfProd,constants);
 	//b_errorBuffer[tid] = (constants->cb_param1 * evaluateKernel(result1,sdata[threadID].ind1/n,sdata[threadID].ind3/n,b_selfProd,constants)) + (constants->cb_param2 * evaluateKernel(result2,sdata[threadID].ind2/n,sdata[threadID].ind3/n,b_selfProd,constants));
 }

@@ -1,4 +1,4 @@
-typedef float svm_precision;
+typedef double svm_precision;
 #define thread_group_size 64
 
 struct constantBuffer{

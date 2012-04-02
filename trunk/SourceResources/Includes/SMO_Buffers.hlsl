@@ -1,4 +1,4 @@
-typedef float svm_precision;
+typedef double svm_precision;
 
 cbuffer SharedBuffer : register(b0)
 {

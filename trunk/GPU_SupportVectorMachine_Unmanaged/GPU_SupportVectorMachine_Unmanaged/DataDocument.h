@@ -31,6 +31,9 @@ namespace SVM_Framework{
 		int m_cl1Value,m_cl2Value;
 
 		bool m_normalize;
+
+		unsigned int	m_numCl1,
+						m_numCl2;
 	};
 }
 

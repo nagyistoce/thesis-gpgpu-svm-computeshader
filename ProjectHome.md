@@ -1,0 +1,1 @@
+A support vector machine algorithm application. Including Direct Compute, CUDA, OpenCL and CPU implementations.
